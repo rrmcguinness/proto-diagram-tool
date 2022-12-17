@@ -4,9 +4,10 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.currency {
-enum .Currency{
+```mermaid
+classDiagram
+class Currency{
+<<enumeration>>
   CURRENCY_UNKNOWN
   AED
   AFN
@@ -170,8 +171,6 @@ enum .Currency{
   ZAR
   ZMW
   ZWD
-}
-
 }
 
 ```

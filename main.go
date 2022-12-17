@@ -29,7 +29,7 @@ var mdTemplate = `
 ## Comments
 %s
 
-` + "```plantuml\n@startuml\n%s\n```\n@enduml\n"
+` + "```mermaid\n%s\n```\n\n"
 
 func main() {
 	flag.Parse()
@@ -48,7 +48,7 @@ func main() {
 			pkg := reader.Read(path)
 			tree = append(tree, pkg)
 
-			content := fmt.Sprintf(mdTemplate, pkg.Name, pkg.Comments, pkg.PlantUML())
+			content := fmt.Sprintf(mdTemplate, pkg.Name, pkg.Comments, pkg.Mermaid())
 			d := path[0:strings.LastIndex(path, string(filepath.Separator))+1] + pkg.Name + ".md"
 			err := os.WriteFile(d, []byte(content), 0644)
 
@@ -61,9 +61,5 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("failed to process directory: %s with error: %v", *directory, err)
-	}
-
-	for _, p := range tree {
-		fmt.Printf("%s\n\n", p.PlantUML())
 	}
 }

@@ -4,14 +4,10 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.geo {
-enum .GeoSegmentGroup{
-  REGION
-  ZONE
-}
-
-enum .GeoSegment{
+```mermaid
+classDiagram
+class GeoSegment{
+<<enumeration>>
   WORLD
   CONTINENT
   COUNTRY
@@ -20,7 +16,10 @@ enum .GeoSegment{
   MUNICIPALITY
   NEIGHBORHOOD
 }
-
+class GeoSegmentGroup{
+<<enumeration>>
+  REGION
+  ZONE
 }
 
 ```

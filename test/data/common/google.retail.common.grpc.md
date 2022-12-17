@@ -4,9 +4,8 @@
 ## Comments
 
 
-```plantuml
-package google.retail.common.grpc {
-}
+```mermaid
+classDiagram
 
 ```
 

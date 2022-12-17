@@ -4,9 +4,10 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.communication {
-enum .Phone{
+```mermaid
+classDiagram
+class Phone{
+<<enumeration>>
   UNKNOWN
   MOBILE
   FAX_HOME
@@ -16,8 +17,6 @@ enum .Phone{
   MAIN
   WORK
   CUST_SUP
-}
-
 }
 
 ```

@@ -4,9 +4,10 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.lang {
-enum .Language{
+```mermaid
+classDiagram
+class Language{
+<<enumeration>>
   UNKNOWN
   AA
   AF
@@ -134,8 +135,6 @@ enum .Language{
   YI
   YO
   ZU
-}
-
 }
 
 ```

@@ -5,14 +5,14 @@ import (
 )
 
 const (
-	PatternRelationshipInheritance = "%s --|> %s" // inheritance
-	PatternRelationshipComposition = "%s --* %s"  // Strong life-cycle dependency (Parent / Child Relationship)
-	PatternRelationshipAggregation = "%s --o %s"  // Weak life-cycle dependency (Associated relationship, but independent)
-	PatternRelationshipAssociation = "%s --> %s"  // A is associated to B
-	PatternRelationshipLinkSolid   = "%s -- %s"   // A is linked to B
-	PatternRelationshipLinkDashed  = "%s .. %s"   // A is linked loosely to B
-	PatternRelationshipDependency  = "%s ..> %s"  // A depends on B
-	PatternRelationshipRealization = "%s ..|> %s" // A realizes B
+	PatternRelationshipInheritance = "  %s --|> %s" // inheritance
+	PatternRelationshipComposition = "  %s --* %s"  // Strong life-cycle dependency (Parent / Child Relationship)
+	PatternRelationshipAggregation = "  %s --o %s"  // Weak life-cycle dependency (Associated relationship, but independent)
+	PatternRelationshipAssociation = "  %s --> %s"  // A is associated to B
+	PatternRelationshipLinkSolid   = "  %s -- %s"   // A is linked to B
+	PatternRelationshipLinkDashed  = "  %s .. %s"   // A is linked loosely to B
+	PatternRelationshipDependency  = "  %s ..> %s"  // A depends on B
+	PatternRelationshipRealization = "  %s ..|> %s" // A realizes B
 
 	PatternType           = "%s%s %s"          // Visibility, Type, Name
 	PatternFunctionVoid   = "%s%s(%s)"         //Visibility, Function Name, Arguments

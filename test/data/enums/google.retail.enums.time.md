@@ -4,9 +4,10 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.time {
-enum .TimeZone{
+```mermaid
+classDiagram
+class TimeZone{
+<<enumeration>>
   UTC0000
   UTCMinus1100MidwayIsland_Samoa
   UTCMinus1000Hawaii
@@ -72,8 +73,6 @@ enum .TimeZone{
   UTCPlus1000Vladivostok
   UTCPlus1200Auckland_Wellington
   UTCPlus1300Nuku_alofa
-}
-
 }
 
 ```

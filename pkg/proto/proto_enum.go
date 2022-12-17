@@ -94,3 +94,13 @@ func (e *Enum) PlantUML() string {
 	out += "}\n"
 	return out
 }
+
+func (e *Enum) Mermaid() string {
+	var out string
+	out += fmt.Sprintf("class %s{\n<<enumeration>>\n", e.Name)
+	for _, v := range e.values {
+		out += fmt.Sprintf("  %s\n", v.Name)
+	}
+	out += "}\n"
+	return out
+}

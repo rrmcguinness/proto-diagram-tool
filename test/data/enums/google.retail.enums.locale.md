@@ -4,9 +4,10 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.locale {
-enum .Locale{
+```mermaid
+classDiagram
+class Locale{
+<<enumeration>>
   UNKNOWN
   SQ
   AM
@@ -166,8 +167,6 @@ enum .Locale{
   YI
   ZU
   LOCALE_ANY
-}
-
 }
 
 ```

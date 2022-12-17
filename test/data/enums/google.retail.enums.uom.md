@@ -4,56 +4,17 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.uom {
-enum .Screen{
-  SCREEN_OTHER
-  PX
-  PT
-  EM
-  PCT
-  IN
-}
-
-enum .Weight{
-  WEIGHT_OTHER
-  OUNCE
-  CENTIGRAM
-  DECAGRAM
-  DECIGRAM
-  DRAM
-  DRAM_APOTHECARY
-  GRAIN
-  GRAIN_APOTHECARY
-  GRAIN_TROY
-  GRAM
-  HECTOGRAM
-  HUNDRED_WEIGHT_LONG
-  HUNDRED_WEIGHT_SHORT
-  KILOGRAM
-  MILLIGRAM
-  OUNCE_APOTHECARY
-  OUNCE_TROY
-  PENNY_WEIGHT_TROY
-  POUND
-  POUND_APOTHECARY
-  POUND_TROY
-  SCRUPLE_APOTHECARY
-  STONE
-  TON
-  TON_LONG
-  TON_SHORT
-  TONNE
-}
-
-enum .Packaging{
+```mermaid
+classDiagram
+class Packaging{
+<<enumeration>>
   PACKAGE_OTHER
   PACKAGE_BOX
   PACKAGE_CYLINDER
   PACKAGE_ENVELOPE
 }
-
-enum .Time{
+class Time{
+<<enumeration>>
   TIME_OTHER
   SECONDS
   MINUTES
@@ -63,8 +24,8 @@ enum .Time{
   MONTHS
   YEARS
 }
-
-enum .Area{
+class Area{
+<<enumeration>>
   AREA_OTHER
   SQUARE_INCH
   ACRE
@@ -77,8 +38,8 @@ enum .Area{
   SQR_YARD
   SQR_KILOMETER
 }
-
-enum .Capacity{
+class Capacity{
+<<enumeration>>
   CAPACITY_OTHER
   CUBIC_INCH
   ACRE_FOOT
@@ -104,8 +65,8 @@ enum .Capacity{
   PINT
   QUART
 }
-
-enum .Count{
+class Count{
+<<enumeration>>
   COUNT_OTHER
   EACH
   BAG
@@ -137,8 +98,8 @@ enum .Count{
   SINGLE
   TUBE
 }
-
-enum .Distance{
+class Distance{
+<<enumeration>>
   DISTANCE_OTHER
   INCH
   CENTIMETER
@@ -156,7 +117,45 @@ enum .Distance{
   ROD
   YARD
 }
-
+class Screen{
+<<enumeration>>
+  SCREEN_OTHER
+  PX
+  PT
+  EM
+  PCT
+  IN
+}
+class Weight{
+<<enumeration>>
+  WEIGHT_OTHER
+  OUNCE
+  CENTIGRAM
+  DECAGRAM
+  DECIGRAM
+  DRAM
+  DRAM_APOTHECARY
+  GRAIN
+  GRAIN_APOTHECARY
+  GRAIN_TROY
+  GRAM
+  HECTOGRAM
+  HUNDRED_WEIGHT_LONG
+  HUNDRED_WEIGHT_SHORT
+  KILOGRAM
+  MILLIGRAM
+  OUNCE_APOTHECARY
+  OUNCE_TROY
+  PENNY_WEIGHT_TROY
+  POUND
+  POUND_APOTHECARY
+  POUND_TROY
+  SCRUPLE_APOTHECARY
+  STONE
+  TON
+  TON_LONG
+  TON_SHORT
+  TONNE
 }
 
 ```

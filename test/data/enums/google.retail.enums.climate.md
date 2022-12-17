@@ -4,9 +4,10 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.climate {
-enum .Climate{
+```mermaid
+classDiagram
+class Climate{
+<<enumeration>>
   CLIMATE_UNKNOWN
   A
   AF
@@ -37,8 +38,6 @@ enum .Climate{
   ET
   H
   WSH
-}
-
 }
 
 ```

@@ -61,3 +61,17 @@ func (p *Package) PlantUML() string {
 	out += "}\n"
 	return out
 }
+
+func (p *Package) Mermaid() string {
+	var out string
+	out += "classDiagram\n"
+	for _, m := range p.Messages {
+		out += m.Mermaid()
+	}
+
+	for _, e := range p.Enums {
+		out += e.Mermaid()
+	}
+
+	return out
+}

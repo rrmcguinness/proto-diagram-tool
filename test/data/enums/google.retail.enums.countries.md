@@ -4,9 +4,10 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.countries {
-enum .Country{
+```mermaid
+classDiagram
+class Country{
+<<enumeration>>
   UNKNOWN
   AFG
   ALB
@@ -253,8 +254,6 @@ enum .Country{
   ZMB
   ZWE
   ALA
-}
-
 }
 
 ```

@@ -39,9 +39,7 @@ import "google/protobuf/timestamp.proto";
  * Site
  ***********************************************************************/
 
-
-message Site {
-  /* Designates and identifies the lowest level of decomposition a retailer uses
+/* Designates and identifies the lowest level of decomposition a retailer uses
    * to assign customers, suppliers, selling locations, administrative locations,
    * distribution centers, etc. to a geographic area (or point).
    *
@@ -50,19 +48,20 @@ message Site {
    * hierarchy of geographic locations to be used for data aggregation and drill
    * down analysis related to geography.
    */
-  message PhysicalLocation {
-    google.retail.common.pb.Address address = 1  [json_name = 'address'];
-    google.retail.enums.climate.Climate climate = 2 [json_name = 'climate'];
-    int32 longitude_degrees = 3 [json_name = 'lng_d'];
-    int32 longitude_minutes = 4  [json_name = 'lng_m'];
-    int32 longitude_seconds = 5  [json_name = 'lng_s'];
-    int32 latitude_degrees = 6  [json_name = 'lat_d'];
-    int32 latitude_minutes = 7  [json_name = 'lat_m'];
-    int32 latitude_seconds = 8  [json_name = 'lat_s'];
-    string latitude_direction_code = 9  [json_name = 'lat_dir_code'];
-    double altitude_meters = 10  [json_name = 'alt_m'];
-  }
+message PhysicalLocation {
+  google.retail.common.pb.Address address = 1  [json_name = 'address'];
+  google.retail.enums.climate.Climate climate = 2 [json_name = 'climate'];
+  int32 longitude_degrees = 3 [json_name = 'lng_d'];
+  int32 longitude_minutes = 4  [json_name = 'lng_m'];
+  int32 longitude_seconds = 5  [json_name = 'lng_s'];
+  int32 latitude_degrees = 6  [json_name = 'lat_d'];
+  int32 latitude_minutes = 7  [json_name = 'lat_m'];
+  int32 latitude_seconds = 8  [json_name = 'lat_s'];
+  string latitude_direction_code = 9  [json_name = 'lat_dir_code'];
+  double altitude_meters = 10  [json_name = 'alt_m'];
+}
 
+message Site {
   google.retail.common.pb.VersionID id = 1 [json_name = "id"];
   // Site type specifies STORE, WAREHOUSE, CALL_CENTER, etc.
   string site_type = 2  [json_name = "site_t"];
@@ -127,6 +126,91 @@ message LocationMeasure {
 }
 
 /*
+     * Describes the shape of the location as repeatable points as related
+     * to the UOM of the parent location
+     */
+message LocationVertex {
+  // The order of the vertex
+  int32 ordinal = 1 [json_name = "ord"];
+  /*
+   * The X-coordinate of this LocationVertex within a given location local
+   * coordinate system.
+   */
+  string coordinate_x = 2 [json_name = "x"];
+  /*
+   * The Y-coordinate of this LocationVertex within a given location local
+   * coordinate system.
+   */
+  string coordinate_y = 3 [json_name = "y"];
+  /*
+   * The Z-coordinate of this LocationVertex within a given location local
+   * coordinate system.
+   */
+  string coordinate_z = 4 [json_name = "z"];
+}
+
+/*
+   * Outrigger entity to temporarily represent location coordinates.
+   *
+   * Location is a named area within a Site or within a Location.  Location
+   * Coordinate defines the insertion point of a location within a site or
+   * location's local coordinate system.  It provides a way to position the
+   * origin of a location (which is the back left corner of a location).
+   */
+message LocationCoordinate {
+  /*
+   * The degree offset representing the angular orientation of a LOCATION's
+   * ORIGIN with respect to the Location.
+   *
+   * The degrees are measured in a COUNTER CLOCKWISE direction from back left
+   * corner which is assumed to be 0 degrees.
+   *
+   * In most scenarios the location will be viewed on a XYZ axis that
+   * represents a local cartesian space.  This offset documents the angular
+   * difference from the location's orientation from its parent orientation.
+   * Used as a basis for transforming coordinate systems between a parent site
+   * and the locations it contains OR between a parent location and its
+   * children.
+   */
+  double angle_offset_degrees = 1 [json_name = "a"];
+  /*
+   * The X coordinate for the location insertion point within a Site or parent
+   * location.  Places the left back corner of a location.  From this point
+   * the vertex points are measured to define the shape of the location
+   * relative to 0,0,0 local coordinate system (i.e. local to the location).
+   */
+  string coordinate_x = 2 [json_name = "x"];
+  /*
+   * The Y coordinate for the location insertion point within a Site or parent
+   * location.  Places the left back corner of a location.  From this point
+   * the vertex points are measured to define the shape of the location
+   * relative to 0,0,0 local coordinate system (i.e. local to the location).
+   */
+  string coordinate_y = 3 [json_name = "y"];
+  /*
+   * The Z coordinate for the location insertion point within a Site or parent
+   * location.  Places the left back corner of a location.  From this point
+   * the vertex points are measured to define the shape of the location
+   * relative to 0,0,0 local coordinate system (i.e. local to the location).
+   */
+  string coordinate_z = 4 [json_name = "z"];
+
+  repeated LocationVertex location_vertices = 5 [json_name = "vertices"];
+}
+
+// A merchandise group represents the intended use of the location to an
+// attributed merchandise hierarchy
+message MerchGroup {
+  // The merchandise hierarchy id
+  string merchandise_hierarchy_id = 1  [json_name = "merch_hrchy_id"];
+  // The date merchandise from this group was used in this location
+  google.protobuf.Timestamp effective_date = 2 [json_name = "eff_date"];
+  // A performance perspective continually updated to evaluate how a
+  // merch hierarchy is performing or has performed in this location
+  double performance_score = 3 [json_name = "score"];
+}
+
+/*
  * A physical place the retailer conducts business. It may be any or all of the
  * defined sub-types: WorkLocation, SellingLocation, InventoryLocation.
  *
@@ -161,92 +245,12 @@ message Location {
   // weight limits, etc.
   repeated LocationMeasure measures = 6 [json_name = "measures"];
 
-  // A merchandise group represents the intended use of the location to an
-  // attributed merchandise hierarchy
-  message MerchGroup {
-    // The merchandise hierarchy id
-    string merchandise_hierarchy_id = 1  [json_name = "merch_hrchy_id"];
-    // The date merchandise from this group was used in this location
-    google.protobuf.Timestamp effective_date = 2 [json_name = "eff_date"];
-    // A performance perspective continually updated to evaluate how a
-    // merch hierarchy is performing or has performed in this location
-    double performance_score = 3 [json_name = "score"];
-  }
+
 
   // A list of historical merchandise hierarchies used in this location.
   repeated MerchGroup merchandise_groups = 7 [json_name = "merch_grps"];
 
-  /*
-   * Outrigger entity to temporarily represent location coordinates.
-   *
-   * Location is a named area within a Site or within a Location.  Location
-   * Coordinate defines the insertion point of a location within a site or
-   * location's local coordinate system.  It provides a way to position the
-   * origin of a location (which is the back left corner of a location).
-   */
-  message LocationCoordinate {
-    /*
-     * The degree offset representing the angular orientation of a LOCATION's
-     * ORIGIN with respect to the Location.
-     *
-     * The degrees are measured in a COUNTER CLOCKWISE direction from back left
-     * corner which is assumed to be 0 degrees.
-     *
-     * In most scenarios the location will be viewed on a XYZ axis that
-     * represents a local cartesian space.  This offset documents the angular
-     * difference from the location's orientation from its parent orientation.
-     * Used as a basis for transforming coordinate systems between a parent site
-     * and the locations it contains OR between a parent location and its
-     * children.
-     */
-    double angle_offset_degrees = 1 [json_name = "a"];
-    /*
-     * The X coordinate for the location insertion point within a Site or parent
-     * location.  Places the left back corner of a location.  From this point
-     * the vertex points are measured to define the shape of the location
-     * relative to 0,0,0 local coordinate system (i.e. local to the location).
-     */
-    string coordinate_x = 2 [json_name = "x"];
-    /*
-     * The Y coordinate for the location insertion point within a Site or parent
-     * location.  Places the left back corner of a location.  From this point
-     * the vertex points are measured to define the shape of the location
-     * relative to 0,0,0 local coordinate system (i.e. local to the location).
-     */
-    string coordinate_y = 3 [json_name = "y"];
-    /*
-     * The Z coordinate for the location insertion point within a Site or parent
-     * location.  Places the left back corner of a location.  From this point
-     * the vertex points are measured to define the shape of the location
-     * relative to 0,0,0 local coordinate system (i.e. local to the location).
-     */
-    string coordinate_z = 4 [json_name = "z"];
 
-    /*
-     * Describes the shape of the location as repeatable points as related
-     * to the UOM of the parent location
-     */
-    message LocationVertex {
-      // The order of the vertex
-      int32 ordinal = 1 [json_name = "ord"];
-      /*
-       * The X-coordinate of this LocationVertex within a given location local
-       * coordinate system.
-       */
-      string coordinate_x = 2 [json_name = "x"];
-      /*
-       * The Y-coordinate of this LocationVertex within a given location local
-       * coordinate system.
-       */
-      string coordinate_y = 3 [json_name = "y"];
-      /*
-       * The Z-coordinate of this LocationVertex within a given location local
-       * coordinate system.
-       */
-      string coordinate_z = 4 [json_name = "z"];
-    }
-    repeated LocationVertex location_vertices = 5 [json_name = "vertices"];
-  }
   // Coordinates of the location
   LocationCoordinate location_coordinate = 8;
   // Children locations, as a location may be hierarchical

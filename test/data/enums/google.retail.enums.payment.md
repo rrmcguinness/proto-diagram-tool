@@ -4,9 +4,10 @@
 ## Comments
 
 
-```plantuml
-package google.retail.enums.payment {
-enum .Payment{
+```mermaid
+classDiagram
+class Payment{
+<<enumeration>>
   UNKNOWN
   CREDIT_CARD
   DEBIT_CARD
@@ -20,8 +21,6 @@ enum .Payment{
   MOB_LNK
   MOD_COD
   INVOICE
-}
-
 }
 
 ```
