@@ -1,77 +1,81 @@
 package proto
 
 import (
+	"bufio"
 	"fmt"
-	"regexp"
+	"os"
+	"strings"
 )
 
-const (
-	RegexPackageMatcher = `^package\s+(.*?);$`
-)
+var isDebug bool
 
-var patternPackage *regexp.Regexp
-
-func init() {
-	patternPackage = regexp.MustCompile(RegexPackageMatcher)
-}
-
-// Package the proto package, not the language package
 type Package struct {
+	Path     string
 	Name     string
-	Comments string
-	Messages map[string]*Message
-	Enums    map[string]*Enum
+	Comment  *Comment
+	Options  []*Option
+	Imports  []*Import
+	Messages []*Message
+	Enums    []*Enum
 }
 
-func IsPackage(in string) bool {
-	return patternPackage.MatchString(in)
+func NewPackage(path string) *Package {
+	pkg := &Package{Path: path}
+	return pkg
 }
 
-func GetPackageName(in string) string {
-	groups := patternPackage.FindStringSubmatch(in)
-	return groups[1]
-}
+func (p *Package) Read(debug bool) error {
+	isDebug = debug
 
-func NewPackage(in string, comments string) *Package {
-	return &Package{
-		Name:     GetPackageName(in),
-		Comments: comments,
-		Messages: make(map[string]*Message),
-		Enums:    make(map[string]*Enum),
+	readFile, err := os.Open(p.Path)
+	if err != nil {
+		return err
 	}
-}
+	scanner := bufio.NewScanner(readFile)
+	for scanner.Scan() {
+		line := scanner.Text()
+		line = strings.TrimSpace(line)
 
-func (p *Package) AddMessage(message *Message) {
-	p.Messages[message.FQN] = message
-}
+		fmt.Printf("Current Line: `%s`\n", line)
 
-func (p *Package) AddEnum(e *Enum) {
-	p.Enums[e.FQN] = e
-}
-
-func (p *Package) PlantUML() string {
-	var out string
-	out += fmt.Sprintf("package %s {\n", p.Name)
-	for _, e := range p.Enums {
-		out += fmt.Sprintf("%s\n", e.PlantUML())
-	}
-	for _, m := range p.Messages {
-		out += fmt.Sprintf("%s\n", m.PlantUML())
-	}
-	out += "}\n"
-	return out
-}
-
-func (p *Package) Mermaid() string {
-	var out string
-	out += "classDiagram\n"
-	for _, m := range p.Messages {
-		out += m.Mermaid()
-	}
-
-	for _, e := range p.Enums {
-		out += e.Mermaid()
+		for _, visitor := range RegisteredVisitors {
+			var comment *Comment
+			if visitor.CanVisit(line) {
+				rt := visitor.Visit(line, scanner, comment)
+				switch t := rt.(type) {
+				case *Option:
+					p.Options = append(p.Options, t)
+				case *Import:
+					p.Imports = append(p.Imports, t)
+				case *Message:
+					p.Messages = append(p.Messages, t)
+				case *Enum:
+					p.Enums = append(p.Enums, t)
+				case *Comment:
+					comment = t
+				case *Package:
+					p.Name = t.Name
+					if comment != nil {
+						p.Comment = &Comment{value: comment.value}
+					}
+				default:
+					fmt.Printf("Unhandled Return type for package: %T visitor\n", t)
+				}
+			}
+		}
 	}
 
-	return out
+	return nil
+}
+
+type PackageVisitor struct {
+}
+
+func (pv *PackageVisitor) CanVisit(in string) bool {
+	return strings.HasPrefix(in, "package ") && strings.HasSuffix(in, Semicolon)
+}
+
+func (pv *PackageVisitor) Visit(in string, _ *bufio.Scanner, _ *Comment) interface{} {
+	fValues := strings.Split(in, Space)
+	return &Package{Name: RemoveSemicolon(fValues[1])}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -13,6 +14,7 @@ import (
 
 var directory *string
 var recursive *bool
+var debug *bool
 
 const (
 	ProtoSuffix = ".proto"
@@ -21,6 +23,7 @@ const (
 func init() {
 	directory = flag.String("d", ".", "The directory to read.")
 	recursive = flag.Bool("r", true, "Read recursively.")
+	debug = flag.Bool("debug", true, "Enable debugging")
 }
 
 var mdTemplate = `
@@ -36,7 +39,7 @@ func main() {
 	log.Printf("Reading Directory : %s\n", *directory)
 	log.Printf("Recursively: %v\n", *recursive)
 
-	tree := make([]*proto.Package, 0)
+	packages := make([]*proto.Package, 0)
 
 	err := filepath.Walk(*directory, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -44,20 +47,25 @@ func main() {
 		}
 
 		if strings.HasSuffix(path, ProtoSuffix) {
-			reader := proto.NewReadState()
-			pkg := reader.Read(path)
-			tree = append(tree, pkg)
 
-			content := fmt.Sprintf(mdTemplate, pkg.Name, pkg.Comments, pkg.Mermaid())
-			d := path[0:strings.LastIndex(path, string(filepath.Separator))+1] + pkg.Name + ".md"
-			err := os.WriteFile(d, []byte(content), 0644)
-
+			pkg := proto.NewPackage(path)
+			err := pkg.Read(*debug)
 			if err != nil {
-				fmt.Printf("Failed to write file: %s", d)
+				fmt.Printf("error while reading package %s with value: %v", path, err)
 			}
+			packages = append(packages, pkg)
 		}
+
 		return nil
 	})
+
+	for _, pkg := range packages {
+		b, err := json.Marshal(pkg)
+		if err != nil {
+			fmt.Printf("failed to marshal package: %s", pkg.Name)
+		}
+		fmt.Printf("Object: %s\nValue:\n%s", pkg.Name, string(b))
+	}
 
 	if err != nil {
 		log.Fatalf("failed to process directory: %s with error: %v", *directory, err)

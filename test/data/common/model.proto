@@ -275,21 +275,24 @@ message ICAOCode {
   string time_zone = 17 [json_name = 'tz'];
 }
 
+
+message SocialMediaNetworkIdentity {
+  string platform = 1 [json_name = 'plt'];
+  string platform_id = 2 [json_name = 'plt_id'];
+}
+
+enum ContactMethod {
+  OTHER = 0;
+  BUSINESS = 1;
+  PERSONAL = 3;
+  THIRD_PARTY = 4;
+}
+
 /*
  * Associative entity denoting how a Party (in a particular role) may be
  * contacted for a particular purpose.
  */
 message Contact {
-  message SocialMediaNetworkIdentity {
-    string platform = 1 [json_name = 'plt'];
-    string platform_id = 2 [json_name = 'plt_id'];
-  }
-  enum ContactMethod {
-    OTHER = 0;
-    BUSINESS = 1;
-    PERSONAL = 3;
-    THIRD_PARTY = 4;
-  }
   string id = 1 [json_name = 'id'];
   /*
    * Retailer defined reasons for contacting Parties and Sites. Suggested values
@@ -375,17 +378,19 @@ message TimeBoundRequest {
   google.protobuf.Timestamp end_date = 2 [json_name = 'end_dt'];
 }
 
+enum StatusResponseType {
+  SUCCESS = 0;
+  ERROR = 1;
+  CREATED = 2;
+  UPDATED = 3;
+  DELETED = 4;
+}
+
 // A transfer object suitable for stream and non-stream error
 message StatusResponse {
-  enum Type {
-    SUCCESS = 0;
-    ERROR = 1;
-    CREATED = 2;
-    UPDATED = 3;
-    DELETED = 4;
-  }
+
   google.protobuf.Timestamp ts = 1;
-  Type type = 2;
+  StatusResponseType type = 2;
   string id = 3;
   string message = 4;
   // The original payload is used in the error response for clients that MUST

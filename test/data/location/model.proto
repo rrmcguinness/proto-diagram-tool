@@ -52,8 +52,8 @@ message PhysicalLocation {
   google.retail.common.pb.Address address = 1  [json_name = 'address'];
   google.retail.enums.climate.Climate climate = 2 [json_name = 'climate'];
   int32 longitude_degrees = 3 [json_name = 'lng_d'];
-  int32 longitude_minutes = 4  [json_name = 'lng_m'];
-  int32 longitude_seconds = 5  [json_name = 'lng_s'];
+  int32 longitude_minutes = 4 [json_name = 'lng_m'];
+  int32 longitude_seconds = 5 [json_name = 'lng_s'];
   int32 latitude_degrees = 6  [json_name = 'lat_d'];
   int32 latitude_minutes = 7  [json_name = 'lat_m'];
   int32 latitude_seconds = 8  [json_name = 'lat_s'];
@@ -84,7 +84,9 @@ message Site {
    * the location's orientation from NORTH.
    *
    * Supports transformation of site plan coordinates from NORTH orientation.
-   * double north_angle_offset = 5;
+   */
+  double north_angle_offset = 5;
+  /*
    * International code used to designate airport/weather reporting stations.
    * This is the closest thing to an international standard for designating
    * weather forecasting/current condition reporting areas.
@@ -92,10 +94,10 @@ message Site {
    */
   string icao_code = 6  [json_name = "icao_cd"];
   // Time Zone of the site, this may be derived from location
-  google.retail.enums.time.TimeZone time_zone = 7  [json_name = "tz"];
+  google.retail.enums.time.TimeZone time_zone = 7 [json_name = "tz"];
   // The contacts associated to the site, store manager, shipping manager,
   // department phones, etc.
-  repeated google.retail.common.pb.Contact contacts = 8  [json_name = "cntcts"];
+  repeated google.retail.common.pb.Contact contacts = 8 [json_name = "cntcts"];
   // Locations internal to the site, such as shelves, public areas,
   // end caps, etc. These are strings and not version pinned.
   repeated string location_ids = 9  [json_name = "loc_ids"];
