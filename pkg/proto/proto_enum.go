@@ -14,7 +14,10 @@ type EnumValue struct {
 }
 
 func NewEnumValue(ordinal string, value string) *EnumValue {
-	v, _ := strconv.ParseInt(ordinal, 10, 32)
+	v, e := strconv.ParseInt(RemoveSemicolon(ordinal), 10, 64)
+	if e != nil {
+		fmt.Sprintf("===========> %v", e)
+	}
 	return &EnumValue{
 		Ordinal: int(v),
 		Value:   value,
@@ -29,48 +32,63 @@ func NewEnumValueWithComment(ordinal string, value string, comment *Comment) *En
 
 type Enum struct {
 	*Qualified
-	values []*EnumValue
+	Values []*EnumValue
 }
 
 func NewEnum(q string, name string, comment *Comment) *Enum {
+	if comment == nil {
+		comment = &Comment{}
+	}
 	return &Enum{
 		Qualified: &Qualified{
 			Qualifier: q,
 			Name:      name,
 			Comment:   comment,
 		},
-		values: make([]*EnumValue, 0),
+		Values: make([]*EnumValue, 0),
 	}
 }
 
 func (e *Enum) AddEnumValue(ordinal string, name string) {
-	e.values = append(e.values, NewEnumValue(ordinal, name))
+	e.Values = append(e.Values, NewEnumValue(ordinal, name))
 }
 
 func (e *Enum) AddEnumValueWithComment(ordinal string, name string, comment string) {
-	e.values = append(e.values, NewEnumValueWithComment(ordinal, name, &Comment{value: comment}))
+	e.Values = append(e.Values, NewEnumValueWithComment(ordinal, name, &Comment{Value: comment}))
 }
 
 type EnumVisitor struct {
+	// Handle Comments
+	commentVisitor *CommentVisitor
+}
+
+func (ev *EnumVisitor) init() {
+	ev.commentVisitor = &CommentVisitor{}
 }
 
 func (ev *EnumVisitor) CanVisit(in string) bool {
-	return strings.HasPrefix(in, "enum ")
+	return strings.HasPrefix(in, "enum ") && strings.HasSuffix(in, OpenBrace)
 }
 
-func (ev *EnumVisitor) Visit(in string, scanner *bufio.Scanner, comment *Comment) interface{} {
+func (ev *EnumVisitor) Visit(namespace string, in string, scanner *bufio.Scanner, comment *Comment) interface{} {
 	fmt.Println("Visiting Enum")
-
+	in = CleanSpaces(in)
 	fValues := strings.Split(in, Space)
-	out := NewEnum("", fValues[1], comment)
 
-	for n := scanner.Text(); n != "}"; {
+	out := NewEnum(namespace, fValues[1], comment)
+
+	for scanner.Scan() {
+		n := CleanSpaces(scanner.Text())
+		if strings.HasSuffix(n, CloseBrace) {
+			break
+		}
+
 		eValues := strings.Split(n, Space)
 		if len(eValues) == 3 {
-			out.AddEnumValue(RemoveSemicolon(eValues[2]), eValues[0])
+			out.AddEnumValue(eValues[2], eValues[0])
 		} else if len(eValues) > 3 {
 			cmt := strings.Join(eValues[4:], Space)
-			out.AddEnumValueWithComment(RemoveSemicolon(eValues[2]), eValues[0], cmt)
+			out.AddEnumValueWithComment(eValues[2], eValues[0], cmt)
 		}
 	}
 	return out

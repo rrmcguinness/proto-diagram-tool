@@ -17,14 +17,15 @@ func (ov *OptionVisitor) CanVisit(in string) bool {
 	return strings.HasPrefix(in, "option ") && strings.HasSuffix(in, Semicolon)
 }
 
-func (ov *OptionVisitor) Visit(in string, _ *bufio.Scanner, comment *Comment) interface{} {
+func (ov *OptionVisitor) Visit(_ string, in string, _ *bufio.Scanner, comment *Comment) interface{} {
 	fmt.Println("Visiting Option")
+	in = CleanSpaces(in)
 
 	fValues := strings.Split(in, Space)
 	if len(fValues) == 4 {
 		return &Option{&NamedValue{
 			Name:    fValues[1],
-			Value:   fValues[3],
+			Value:   RemoveSemicolon(RemoveDoubleQuotes(fValues[3])),
 			Comment: comment,
 		}}
 	}

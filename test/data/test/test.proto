@@ -24,3 +24,34 @@ option go_package = "github.com/rrmcguinness/proto/test";
 // Java Options
 option java_package = "com.github.rrmcguinness.proto.test";
 option java_multiple_files = true;
+
+// A physical location
+message PhysicalLocation {
+  // An address
+  message Address {
+    // Determines the kind of address
+    enum Type {
+      RESIDENTIAL = 0; // Residential
+      BUSINESS = 1;       // Business Super Cool
+    }
+    string line1 = 1; // Line 1 Comment
+    string line2 = 2;
+    string line3 = 3;
+    string city = 4;
+    string state = 5;
+    string zipcode = 6;
+    Type type = 7;
+    reserved 8 to 20;
+  }
+  Address address = 2;
+  int32 longitude_degrees = 3 [json_name = 'lng_d'];
+  int32 longitude_minutes = 4 [json_name = 'lng_m'];
+  int32 longitude_seconds = 5 [json_name = 'lng_s'];
+  int32 latitude_degrees = 6  [json_name = 'lat_d'];
+  int32 latitude_minutes = 7  [json_name = 'lat_m'];
+  int32 latitude_seconds = 8  [json_name = 'lat_s'];
+  string latitude_direction_code = 9  [json_name = 'lat_dir_code'];
+  double altitude_meters = 10  [json_name = 'alt_m'];
+  map<string, string> meta = 11; // Dude
+  repeated string names = 12 [json_name = 'names']; // Comment
+}

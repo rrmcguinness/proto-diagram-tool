@@ -59,12 +59,14 @@ func main() {
 		return nil
 	})
 
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+
 	for _, pkg := range packages {
-		b, err := json.Marshal(pkg)
+		err := enc.Encode(pkg)
 		if err != nil {
-			fmt.Printf("failed to marshal package: %s", pkg.Name)
+			fmt.Printf("Error encoding package %v", err)
 		}
-		fmt.Printf("Object: %s\nValue:\n%s", pkg.Name, string(b))
 	}
 
 	if err != nil {

@@ -20,7 +20,13 @@ type Package struct {
 }
 
 func NewPackage(path string) *Package {
-	pkg := &Package{Path: path}
+	pkg := &Package{Path: path,
+		Comment:  &Comment{},
+		Options:  make([]*Option, 0),
+		Imports:  make([]*Import, 0),
+		Messages: make([]*Message, 0),
+		Enums:    make([]*Enum, 0),
+	}
 	return pkg
 }
 
@@ -32,16 +38,17 @@ func (p *Package) Read(debug bool) error {
 		return err
 	}
 	scanner := bufio.NewScanner(readFile)
+
+	var comment *Comment
+
 	for scanner.Scan() {
-		line := scanner.Text()
-		line = strings.TrimSpace(line)
+		line := CleanSpaces(scanner.Text())
 
 		fmt.Printf("Current Line: `%s`\n", line)
 
 		for _, visitor := range RegisteredVisitors {
-			var comment *Comment
 			if visitor.CanVisit(line) {
-				rt := visitor.Visit(line, scanner, comment)
+				rt := visitor.Visit(p.Name, line, scanner, comment)
 				switch t := rt.(type) {
 				case *Option:
 					p.Options = append(p.Options, t)
@@ -56,7 +63,7 @@ func (p *Package) Read(debug bool) error {
 				case *Package:
 					p.Name = t.Name
 					if comment != nil {
-						p.Comment = &Comment{value: comment.value}
+						p.Comment.Value = comment.Value[:]
 					}
 				default:
 					fmt.Printf("Unhandled Return type for package: %T visitor\n", t)
@@ -75,7 +82,7 @@ func (pv *PackageVisitor) CanVisit(in string) bool {
 	return strings.HasPrefix(in, "package ") && strings.HasSuffix(in, Semicolon)
 }
 
-func (pv *PackageVisitor) Visit(in string, _ *bufio.Scanner, _ *Comment) interface{} {
+func (pv *PackageVisitor) Visit(_ string, in string, _ *bufio.Scanner, _ *Comment) interface{} {
 	fValues := strings.Split(in, Space)
 	return &Package{Name: RemoveSemicolon(fValues[1])}
 }

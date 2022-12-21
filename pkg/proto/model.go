@@ -8,13 +8,30 @@ import (
 var InvalidImport = errors.New("invalid import")
 
 const (
-	Empty         = ""
-	Space         = " "
-	Equal         = "="
-	OpenBracket   = "["
-	ClosedBracket = "]"
-	DoubleQuote   = `"`
-	Semicolon     = ";"
+	Repeated = "repeated"
+	Map      = "map"
+	Reserved = "reserved"
+
+	SpaceRemovalRegex = `\s+`
+	Period            = "."
+	Empty             = ""
+	Space             = " "
+	OpenBrace         = "{"
+	CloseBrace        = "}"
+	OpenBracket       = "["
+	ClosedBracket     = "]"
+	Semicolon         = ";"
+	Comma             = ","
+
+	InlineCommentPrefix        = "//"
+	MultiLineCommentInitiator  = "/*"
+	MultilineCommentTerminator = "*/"
+	PrefixedComment            = "* "
+	OpenMap                    = "map<"
+	CloseMap                   = ">"
+	DoubleQuote                = "\""
+	SingleQuote                = "'"
+	EndL                       = "\n"
 )
 
 type NamedValue struct {
@@ -24,7 +41,8 @@ type NamedValue struct {
 }
 
 type Annotation struct {
-	*NamedValue
+	Name  string
+	Value any
 }
 
 type Qualified struct {
@@ -44,11 +62,15 @@ func init() {
 
 	// Handle Imports
 	RegisteredVisitors = append(RegisteredVisitors, &ImportVisitor{})
+
 	// Handle Options
 	RegisteredVisitors = append(RegisteredVisitors, &OptionVisitor{})
 
 	// Handle Messages
 	RegisteredVisitors = append(RegisteredVisitors, &MessageVisitor{})
+
+	// Enums
+	RegisteredVisitors = append(RegisteredVisitors, &EnumVisitor{})
 
 	// Must be last as it's the most forgiving
 	RegisteredVisitors = append(RegisteredVisitors, &AttributeVisitor{})
@@ -56,5 +78,9 @@ func init() {
 
 type Visitor interface {
 	CanVisit(in string) bool
-	Visit(in string, scanner *bufio.Scanner, comment *Comment) interface{}
+	Visit(
+		namespace string,
+		in string,
+		scanner *bufio.Scanner,
+		comment *Comment) interface{}
 }
