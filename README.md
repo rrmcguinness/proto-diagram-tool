@@ -4,6 +4,8 @@ This utility package is a compiled Go program that reads a protobuf
 source directory and generates Mermaid Diagrams in PROTO_DIAGRAM.md files
 in each directory.
 
+> NOTE: Only Proto 3 syntax is supported.
+
 This utility was created to ease documentation generation of complex
 Protobuf Libraries in order to simplify understanding the models and services
 described in a Protobuf.
@@ -26,5 +28,5 @@ go build
 ```
 
 ## Options
-* -d - The directory to scan
-* -r - Recursively scan all subdirectories
+* -d - The directory to scan, this is required.
+* -r - Recursively scan all subdirectories (default is true)

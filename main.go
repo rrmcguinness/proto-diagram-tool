@@ -3,8 +3,6 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -36,8 +34,11 @@ var mdTemplate = `
 
 func main() {
 	flag.Parse()
-	log.Printf("Reading Directory : %s\n", *directory)
-	log.Printf("Recursively: %v\n", *recursive)
+
+	proto.SetDebug(*debug)
+	logger := proto.Log
+	logger.Infof("Reading Directory : %s\n", *directory)
+	logger.Infof("Recursively: %v\n", *recursive)
 
 	packages := make([]*proto.Package, 0)
 
@@ -51,7 +52,7 @@ func main() {
 			pkg := proto.NewPackage(path)
 			err := pkg.Read(*debug)
 			if err != nil {
-				fmt.Printf("error while reading package %s with value: %v", path, err)
+				logger.Errorf("error while reading package %s with value: %v", path, err)
 			}
 			packages = append(packages, pkg)
 		}
@@ -65,11 +66,11 @@ func main() {
 	for _, pkg := range packages {
 		err := enc.Encode(pkg)
 		if err != nil {
-			fmt.Printf("Error encoding package %v", err)
+			logger.Errorf("Error encoding package %v", err)
 		}
 	}
 
 	if err != nil {
-		log.Fatalf("failed to process directory: %s with error: %v", *directory, err)
+		logger.Errorf("failed to process directory: %s with error: %v", *directory, err)
 	}
 }

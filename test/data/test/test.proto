@@ -1,17 +1,15 @@
-/* Copyright 2022 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/*
+Copyright 2022 Google LLC
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 syntax = "proto3";
 
 package google.proto.test;
@@ -32,9 +30,12 @@ message PhysicalLocation {
     // Determines the kind of address
     enum Type {
       RESIDENTIAL = 0; // Residential
-      BUSINESS = 1;       // Business Super Cool
+      // Business Super Cool
+      // Lots of docs
+      BUSINESS = 1; // Plus an inline comment
     }
-    string line1 = 1; // Line 1 Comment
+    // Pre line 1, validating
+    string line1 = 1; // Line 1 Comment v2
     string line2 = 2;
     string line3 = 3;
     string city = 4;
@@ -44,8 +45,9 @@ message PhysicalLocation {
     reserved 8 to 20;
   }
   Address address = 2;
-  int32 longitude_degrees = 3 [json_name = 'lng_d'];
-  int32 longitude_minutes = 4 [json_name = 'lng_m'];
+  int32 longitude_degrees = 3 [json_name = 'lng_d']; // Longitude degrees
+  // Longitude Minutes
+  int32 longitude_minutes = 4 [json_name = 'lng_m']; // Plus Inline Longitude
   int32 longitude_seconds = 5 [json_name = 'lng_s'];
   int32 latitude_degrees = 6  [json_name = 'lat_d'];
   int32 latitude_minutes = 7  [json_name = 'lat_m'];
