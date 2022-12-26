@@ -16,35 +16,25 @@
 
 package proto
 
-import "fmt"
+import (
+	"strconv"
+	"strings"
+)
 
-// Logger is a simplified logger for making the code and output readable.
-type Logger struct {
-	debug bool
+type ReservedVisitor struct {
 }
 
-func (l Logger) Debug(in string) {
-	if l.debug {
-		fmt.Printf("DEBUG: %s\n", in)
+func (rv ReservedVisitor) CanVisit(line *Line) bool {
+	return strings.HasPrefix(line.Syntax, PrefixReserved) && line.Token == Semicolon
+}
+
+func (rv ReservedVisitor) Visit(scanner Scanner, in *Line, namespace string) interface{} {
+	Log.Debug("Visiting Reserved")
+	split := in.SplitSyntax()
+	if len(split) == 4 {
+		s, _ := strconv.ParseInt(split[1], 10, 64)
+		e, _ := strconv.ParseInt(split[3], 10, 64)
+		return NewReserved(int32(s), int32(e))
 	}
-}
-
-func (l Logger) Debugf(in string, args ...any) {
-	l.Debug(fmt.Sprintf(in, args...))
-}
-
-func (l Logger) Error(in string) {
-	fmt.Printf("ERROR: %s\n", in)
-}
-
-func (l Logger) Errorf(in string, args ...any) {
-	l.Error(fmt.Sprintf(in, args...))
-}
-
-func (l Logger) Info(in string) {
-	fmt.Printf("INFO: %s\n", in)
-}
-
-func (l Logger) Infof(in string, args ...any) {
-	l.Info(fmt.Sprintf(in, args...))
+	return nil
 }

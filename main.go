@@ -1,8 +1,25 @@
+/*
+ * Copyright 2022 Google, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package main
 
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -64,13 +81,22 @@ func main() {
 	enc.SetIndent("", "  ")
 
 	for _, pkg := range packages {
-		err := enc.Encode(pkg)
+		dir := filepath.Dir(pkg.Path)
+		out := dir + string(filepath.Separator) + pkg.Name + ".md"
+		err = os.WriteFile(out, []byte(pkg.ToMarkdownWithDiagram()), 0644)
 		if err != nil {
-			logger.Errorf("Error encoding package %v", err)
+			fmt.Printf("failed to write file %v\n", err)
 		}
 	}
 
-	if err != nil {
-		logger.Errorf("failed to process directory: %s with error: %v", *directory, err)
-	}
+	//for _, pkg := range packages {
+	//	err := enc.Encode(pkg)
+	//	if err != nil {
+	//		logger.Errorf("Error encoding package %v", err)
+	//	}
+	//}
+	//
+	//if err != nil {
+	//	logger.Errorf("failed to process directory: %s with error: %v", *directory, err)
+	//}
 }

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2022 Google, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package proto
 
 import (
@@ -18,8 +34,8 @@ type attributeVisitor struct {
 // it's a map, repeated, or can effectively be split
 func (av attributeVisitor) CanVisit(in *Line) bool {
 	return (!strings.HasSuffix(in.Syntax, OpenBrace) || !strings.HasSuffix(in.Syntax, CloseBrace)) &&
-			strings.HasPrefix(in.Syntax, "repeated") ||
-			strings.HasPrefix(in.Syntax, "map") || len(in.SplitSyntax()) >= 4
+		strings.HasPrefix(in.Syntax, "repeated") ||
+		strings.HasPrefix(in.Syntax, "map") || len(in.SplitSyntax()) >= 4
 }
 
 func handleRepeated(out *Attribute, split []string) {
@@ -56,12 +72,12 @@ func (av attributeVisitor) Visit(_ Scanner, in *Line, namespace string) interfac
 	out.Annotations = ParseAnnotations(in.Syntax)
 	split := in.SplitSyntax()
 
-	if strings.HasPrefix(in.Syntax, Reserved) {
+	if strings.HasPrefix(in.Syntax, PrefixReserved) {
 		Log.Debug("\t processing reserved attribute")
 		out.Comment += Space + in.Comment
-	} else if strings.HasPrefix(in.Syntax, Repeated) {
+	} else if strings.HasPrefix(in.Syntax, PrefixRepeated) {
 		handleRepeated(out, split)
-	} else if strings.HasPrefix(in.Syntax, Map) {
+	} else if strings.HasPrefix(in.Syntax, PrefixMap) {
 		handleMap(out, split)
 	} else {
 		handleDefaultAttribute(out, split)

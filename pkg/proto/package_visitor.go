@@ -16,35 +16,20 @@
 
 package proto
 
-import "fmt"
+import (
+	"strings"
+)
 
-// Logger is a simplified logger for making the code and output readable.
-type Logger struct {
-	debug bool
+var isDebug bool
+
+type PackageVisitor struct {
 }
 
-func (l Logger) Debug(in string) {
-	if l.debug {
-		fmt.Printf("DEBUG: %s\n", in)
-	}
+func (pv *PackageVisitor) CanVisit(in *Line) bool {
+	return strings.HasPrefix(in.Syntax, "package ") && in.Token == Semicolon
 }
 
-func (l Logger) Debugf(in string, args ...any) {
-	l.Debug(fmt.Sprintf(in, args...))
-}
-
-func (l Logger) Error(in string) {
-	fmt.Printf("ERROR: %s\n", in)
-}
-
-func (l Logger) Errorf(in string, args ...any) {
-	l.Error(fmt.Sprintf(in, args...))
-}
-
-func (l Logger) Info(in string) {
-	fmt.Printf("INFO: %s\n", in)
-}
-
-func (l Logger) Infof(in string, args ...any) {
-	l.Info(fmt.Sprintf(in, args...))
+func (pv *PackageVisitor) Visit(_ Scanner, in *Line, _ string) interface{} {
+	fValues := in.SplitSyntax()
+	return &Package{Name: RemoveSemicolon(fValues[1])}
 }

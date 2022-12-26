@@ -16,35 +16,33 @@
 
 package proto
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-// Logger is a simplified logger for making the code and output readable.
-type Logger struct {
-	debug bool
+type Option struct {
+	*NamedValue
 }
 
-func (l Logger) Debug(in string) {
-	if l.debug {
-		fmt.Printf("DEBUG: %s\n", in)
+type OptionVisitor struct {
+}
+
+func (ov *OptionVisitor) CanVisit(in *Line) bool {
+	return strings.HasPrefix(in.Syntax, "option ") && in.Token == Semicolon
+}
+
+func (ov *OptionVisitor) Visit(_ Scanner, in *Line, _ string) interface{} {
+	fmt.Println("Visiting Option")
+	fValues := in.SplitSyntax()
+	if len(fValues) == 4 {
+		return &Option{&NamedValue{
+			Name:    fValues[1],
+			Value:   fValues[3],
+			Comment: in.Comment[:],
+		}}
 	}
-}
-
-func (l Logger) Debugf(in string, args ...any) {
-	l.Debug(fmt.Sprintf(in, args...))
-}
-
-func (l Logger) Error(in string) {
-	fmt.Printf("ERROR: %s\n", in)
-}
-
-func (l Logger) Errorf(in string, args ...any) {
-	l.Error(fmt.Sprintf(in, args...))
-}
-
-func (l Logger) Info(in string) {
-	fmt.Printf("INFO: %s\n", in)
-}
-
-func (l Logger) Infof(in string, args ...any) {
-	l.Info(fmt.Sprintf(in, args...))
+	return &Option{
+		NamedValue: &NamedValue{Name: "Invalid"},
+	}
 }
