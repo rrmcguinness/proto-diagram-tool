@@ -23,6 +23,10 @@ func ParseOrdinal(in string) int {
 	return int(i)
 }
 
+func FormatLine(in string) string {
+	return strings.TrimSpace(SpaceRemover.ReplaceAllString(in, " "))
+}
+
 func Join(joinCharacter string, values ...string) string {
 	out := ""
 	count := len(values)

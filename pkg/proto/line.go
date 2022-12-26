@@ -1,56 +1,15 @@
 package proto
 
-import (
-	"bufio"
-	"os"
-	"regexp"
-	"strings"
-)
+import "strings"
 
-var SpaceRemover *regexp.Regexp
-
-func init() {
-	SpaceRemover = regexp.MustCompile(SpaceRemovalRegex)
+// Line is a split line for syntax, token, and comment
+type Line struct {
+	Syntax  string
+	Token   string
+	Comment Comment
 }
 
-func FormatLine(in string) string {
-	return strings.TrimSpace(SpaceRemover.ReplaceAllString(in, " "))
-}
-
-func NewScannerWrapper(file *os.File) Scanner {
-	return &ScannerWrapper{scanner: bufio.NewScanner(file)}
-}
-
-type ScannerWrapper struct {
-	scanner *bufio.Scanner
-}
-
-func (sw ScannerWrapper) Scan() bool {
-	return sw.scanner.Scan()
-}
-
-func (sw ScannerWrapper) Text() string {
-	return FormatLine(sw.scanner.Text())
-}
-
-func (sw ScannerWrapper) Split(splitFunction bufio.SplitFunc) {
-	sw.scanner.Split(splitFunction)
-}
-
-func (sw ScannerWrapper) Buffer(buf []byte, max int) {
-	sw.scanner.Buffer(buf, max)
-}
-
-func (sw ScannerWrapper) Err() error {
-	return sw.scanner.Err()
-}
-
-func (sw ScannerWrapper) Bytes() []byte {
-	return sw.scanner.Bytes()
-}
-
-func (sw ScannerWrapper) ReadLine() *Line {
-	in := sw.Text()
+func NewLine(in string) *Line {
 	line := &Line{}
 	if strings.HasPrefix(in, InlineCommentPrefix) {
 		// Handle single comments
@@ -79,4 +38,9 @@ func (sw ScannerWrapper) ReadLine() *Line {
 	}
 	line.Comment = line.Comment.TrimSpace()
 	return line
+}
+
+// SplitSyntax breaks the syntax line on Space the character
+func (l *Line) SplitSyntax() []string {
+	return strings.Split(l.Syntax, Space)
 }

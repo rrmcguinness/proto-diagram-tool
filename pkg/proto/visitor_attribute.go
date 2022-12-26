@@ -18,8 +18,8 @@ type attributeVisitor struct {
 // it's a map, repeated, or can effectively be split
 func (av attributeVisitor) CanVisit(in *Line) bool {
 	return (!strings.HasSuffix(in.Syntax, OpenBrace) || !strings.HasSuffix(in.Syntax, CloseBrace)) &&
-		strings.HasPrefix(in.Syntax, "repeated") ||
-		strings.HasPrefix(in.Syntax, "map") || len(in.SplitSyntax()) >= 4
+			strings.HasPrefix(in.Syntax, "repeated") ||
+			strings.HasPrefix(in.Syntax, "map") || len(in.SplitSyntax()) >= 4
 }
 
 func handleRepeated(out *Attribute, split []string) {
@@ -65,20 +65,6 @@ func (av attributeVisitor) Visit(_ Scanner, in *Line, namespace string) interfac
 		handleMap(out, split)
 	} else {
 		handleDefaultAttribute(out, split)
-	}
-	return out
-}
-
-func ParseAnnotations(in string) []*Annotation {
-	Log.Debug("Processing Annotation")
-	out := make([]*Annotation, 0)
-	if strings.Contains(in, OpenBracket) && strings.Contains(in, ClosedBracket) {
-		annotationString := in[strings.Index(in, OpenBracket)+1 : strings.Index(in, ClosedBracket)]
-		split := strings.Split(strings.ReplaceAll(annotationString, SingleQuote, Empty), Space)
-		out = append(out, &Annotation{
-			Name:  split[0],
-			Value: split[2],
-		})
 	}
 	return out
 }

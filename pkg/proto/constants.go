@@ -19,9 +19,8 @@ const (
 	InlineCommentPrefix        = "//"
 	MultiLineCommentInitiator  = "/*"
 	MultilineCommentTerminator = "*/"
-	PrefixedComment            = "* "
 	OpenMap                    = "map<"
 	CloseMap                   = ">"
-	DoubleQuote                = "\""
-	SingleQuote                = "'"
+	DoubleQuote                = `"`
+	SingleQuote                = `'`
 )

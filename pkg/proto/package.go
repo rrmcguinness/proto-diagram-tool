@@ -4,6 +4,27 @@ import (
 	"os"
 )
 
+// Package is the top level structure of any protobuf
+type Package struct {
+	Path     string
+	Name     string
+	Comment  Comment
+	Options  []*Option
+	Imports  []*Import
+	Messages []*Message
+	Enums    []*Enum
+}
+
+func NewPackage(path string) *Package {
+	pkg := &Package{Path: path,
+		Options:  make([]*Option, 0),
+		Imports:  make([]*Import, 0),
+		Messages: make([]*Message, 0),
+		Enums:    make([]*Enum, 0),
+	}
+	return pkg
+}
+
 func (p *Package) Read(debug bool) error {
 	isDebug = debug
 
@@ -11,7 +32,7 @@ func (p *Package) Read(debug bool) error {
 	if err != nil {
 		return err
 	}
-	scanner := NewScannerWrapper(readFile)
+	scanner := NewProtobufFileScanner(readFile)
 
 	var comment = Comment("")
 
