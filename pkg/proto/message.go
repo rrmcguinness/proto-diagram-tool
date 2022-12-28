@@ -54,7 +54,7 @@ func (m *Message) HasEnums() bool {
 }
 
 func (m *Message) ToMermaid() string {
-	out := fmt.Sprintf("\n%s\nclass %s {", m.Comment.ToMermaid(), m.Name)
+	out := fmt.Sprintf("\n%s\nclass %s {\n", m.Comment.ToMermaid(), m.Name)
 	for _, a := range m.Attributes {
 		out += fmt.Sprintf("  %s\n", a.ToMermaid())
 	}
@@ -64,11 +64,11 @@ func (m *Message) ToMermaid() string {
 	for _, a := range m.Attributes {
 		if len(a.Kind) == 1 {
 			if !strings.Contains(Proto3Types, a.Kind[0]) {
-				out += fmt.Sprintf("%s --> %s\n", m.Name, a.Kind[0])
+				out += fmt.Sprintf("%s --> `%s`\n", m.Name, a.Kind[0])
 			}
 		} else if len(a.Kind) == 2 {
 			if !strings.Contains(Proto3Types, strings.TrimSpace(a.Kind[1])) {
-				out += fmt.Sprintf("%s .. %s\n", m.Name, a.Kind[1])
+				out += fmt.Sprintf("%s .. `%s`\n", m.Name, a.Kind[1])
 			}
 		}
 	}
@@ -76,14 +76,14 @@ func (m *Message) ToMermaid() string {
 	// Handle Message Relationships
 	if m.HasMessages() {
 		for _, msg := range m.Messages {
-			out += fmt.Sprintf("%s --o %s\n", m.Name, msg.Name)
+			out += fmt.Sprintf("%s --o `%s`\n", m.Name, msg.Name)
 			out += msg.ToMermaid()
 		}
 	}
 
 	// Handle Enumeration Relationships
 	for _, e := range m.Enums {
-		out += fmt.Sprintf("%s --o %s\n", m.Name, e.Name)
+		out += fmt.Sprintf("%s --o `%s`\n", m.Name, e.Name)
 		out += e.ToMermaid()
 	}
 

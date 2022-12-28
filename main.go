@@ -38,7 +38,7 @@ const (
 func init() {
 	directory = flag.String("d", ".", "The directory to read.")
 	recursive = flag.Bool("r", true, "Read recursively.")
-	debug = flag.Bool("debug", true, "Enable debugging")
+	debug = flag.Bool("debug", false, "Enable debugging")
 }
 
 var mdTemplate = `
@@ -89,14 +89,16 @@ func main() {
 		}
 	}
 
-	//for _, pkg := range packages {
-	//	err := enc.Encode(pkg)
-	//	if err != nil {
-	//		logger.Errorf("Error encoding package %v", err)
-	//	}
-	//}
-	//
-	//if err != nil {
-	//	logger.Errorf("failed to process directory: %s with error: %v", *directory, err)
-	//}
+	if *debug {
+		for _, pkg := range packages {
+			err := enc.Encode(pkg)
+			if err != nil {
+				logger.Errorf("Error encoding package %v", err)
+			}
+		}
+
+		if err != nil {
+			logger.Errorf("failed to process directory: %s with error: %v", *directory, err)
+		}
+	}
 }

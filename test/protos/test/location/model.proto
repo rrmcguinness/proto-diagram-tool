@@ -12,15 +12,15 @@ limitations under the License.
 */
 syntax = "proto3";
 
-package google.proto.test;
+package test.location;
 
 import "google/protobuf/timestamp.proto";
 
 // Go Lang Options
-option go_package = "github.com/rrmcguinness/proto/test";
+option go_package = "github.com/rrmcguinness/proto/test/location";
 
 // Java Options
-option java_package = "com.github.rrmcguinness.proto.test";
+option java_package = "com.github.rrmcguinness.proto.test.location";
 option java_multiple_files = true;
 
 // A physical location

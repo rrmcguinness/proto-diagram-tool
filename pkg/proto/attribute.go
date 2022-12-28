@@ -38,7 +38,7 @@ func (a *Attribute) ToMermaid() string {
 	} else if a.Map {
 		return Join("", "+ Map<", a.Kind[0], ", ", a.Kind[1], "> ", a.Name)
 	}
-	return Join(Space, "+ ", a.Kind[0], a.Name)
+	return Join(Space, "+", a.Kind[0], a.Name)
 }
 
 // NewAttribute is the Attribute constructor

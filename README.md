@@ -13,8 +13,7 @@ described in a Protobuf.
 If you find this useful, awesome! If you find a bug, please contribute a patch,
 or open a bug. Please follow the [Contributing](CONTRIBUTING.md) guidelines.
 
-Use:
-
+## Building
 ```shell
 // Clone
 git clone https://github.com/rrmcguinness/proto-diagram-tool
@@ -23,10 +22,19 @@ cd proto-diagram-tool
 
 // Build
 go build
-
-./proto-diagram -d /path/to/directory -r true
 ```
 
-## Options
-* -d - The directory to scan, this is required.
-* -r - Recursively scan all subdirectories (default is true)
+## Use and Options
+
+```shell
+./proto-digram -h
+
+Usage of ./proto-diagram:
+  -d string
+        The directory to read. (default ".")
+  -debug
+        Enable debugging
+  -r    Read recursively. (default true)
+  
+./proto-diagram -d test/protos
+```
