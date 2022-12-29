@@ -41,4 +41,5 @@ const (
 	CloseMap                   = ">"
 	DoubleQuote                = `"`
 	SingleQuote                = `'`
+	EndL                       = "\n"
 )

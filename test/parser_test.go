@@ -16,7 +16,15 @@
 
 package test
 
-import "testing"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
+	"testing"
+)
 
 type Parser struct {
 	ignore     []string
@@ -55,5 +63,73 @@ func (p Parser) init() {
 }
 
 func TestParser(t *testing.T) {
+
+	cleaner := regexp.MustCompile(`\s+|\n`)
+
+	dir := "protos/test/location"
+
+	lines := make([]string, 0)
+
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		fmt.Printf("Visiting Path: %s\n", path)
+
+		if strings.HasSuffix(path, ".proto") {
+			readFile, err := os.Open(path)
+			if err != nil {
+				return err
+			}
+
+			scanner := bufio.NewScanner(readFile)
+			scanner.Split(bufio.ScanRunes)
+
+			line := ""
+			tokenReached := false
+
+			for scanner.Scan() {
+				rune := scanner.Text()
+				if rune == ";" || rune == "}" || rune == "{" {
+					lines = append(lines, cleaner.ReplaceAllString(strings.TrimSpace(line+rune), " "))
+					tokenReached = true
+					line = ""
+				} else if strings.HasPrefix(line, "//") && rune == "\n" {
+					if tokenReached {
+						lines = append(lines, cleaner.ReplaceAllString(strings.TrimSpace(line), " "))
+						pLine := lines[len(lines)-2]
+						cLine := lines[len(lines)-1]
+						lines[len(lines)-2] = cLine
+						lines[len(lines)-1] = pLine
+					} else {
+						lines = append(lines, cleaner.ReplaceAllString(strings.TrimSpace(line), " "))
+					}
+					line = ""
+					tokenReached = false
+				} else if strings.HasPrefix(line, "/*") && strings.HasSuffix(line, "*/") {
+					lines = append(lines, cleaner.ReplaceAllString(line, " "))
+					line = ""
+				} else {
+					if rune != "\n" {
+						if rune == " " {
+							if len(line) > 0 {
+								line += rune
+							}
+						} else {
+							line += rune
+						}
+					} else {
+						tokenReached = false
+					}
+				}
+			}
+		}
+		return nil
+	})
+
+	for _, l := range lines {
+		fmt.Println(l)
+	}
+
+	if err != nil {
+		fmt.Printf("Error reading files: %v", err)
+	}
 
 }

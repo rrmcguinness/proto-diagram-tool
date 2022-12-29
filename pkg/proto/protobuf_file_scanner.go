@@ -20,6 +20,7 @@ import (
 	"bufio"
 	"os"
 	"regexp"
+	"strings"
 )
 
 var SpaceRemover *regexp.Regexp
@@ -30,7 +31,10 @@ func init() {
 
 // NewProtobufFileScanner is the constructor for ProtobufFileScanner
 func NewProtobufFileScanner(file *os.File) Scanner {
-	return &ProtobufFileScanner{scanner: bufio.NewScanner(file)}
+	contents := strings.Join(ReadFileToArray(file), "\n")
+	scanner := bufio.NewScanner(strings.NewReader(contents))
+	scanner.Split(bufio.ScanLines)
+	return &ProtobufFileScanner{scanner: scanner}
 }
 
 // ProtobufFileScanner is a specialized scanner for reading protobuf 3 files.

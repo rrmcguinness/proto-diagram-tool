@@ -26,7 +26,7 @@ type PackageVisitor struct {
 }
 
 func (pv *PackageVisitor) CanVisit(in *Line) bool {
-	return strings.HasPrefix(in.Syntax, "package ") && in.Token == Semicolon
+	return strings.HasPrefix(in.Syntax, "package") && in.Token == Semicolon
 }
 
 func (pv *PackageVisitor) Visit(_ Scanner, in *Line, _ string) interface{} {

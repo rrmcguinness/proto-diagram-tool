@@ -82,7 +82,8 @@ func main() {
 
 	for _, pkg := range packages {
 		dir := filepath.Dir(pkg.Path)
-		out := dir + string(filepath.Separator) + pkg.Name + ".md"
+		bName := filepath.Base(pkg.Path)
+		out := dir + string(filepath.Separator) + bName + ".md"
 		err = os.WriteFile(out, []byte(pkg.ToMarkdownWithDiagram()), 0644)
 		if err != nil {
 			fmt.Printf("failed to write file %v\n", err)

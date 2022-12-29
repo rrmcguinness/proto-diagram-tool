@@ -17,7 +17,10 @@
 package proto
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -54,4 +57,57 @@ func Join(joinCharacter string, values ...string) string {
 		}
 	}
 	return out
+}
+
+func ReadFileToArray(file *os.File) []string {
+	cleaner := regexp.MustCompile(`\s+|\n`)
+	lines := make([]string, 0)
+
+	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanRunes)
+
+	line := ""
+	tokenReached := false
+
+	for scanner.Scan() {
+		rune := scanner.Text()
+		if !strings.HasPrefix(line, MultiLineCommentInitiator) && (rune == Semicolon || rune == OpenBrace || rune == CloseBrace) {
+			lines = append(lines, cleaner.ReplaceAllString(strings.TrimSpace(line+rune), Space))
+			tokenReached = true
+			line = ""
+		} else if strings.HasPrefix(line, InlineCommentPrefix) && rune == EndL {
+			if tokenReached {
+				lines = append(lines, cleaner.ReplaceAllString(strings.TrimSpace(line), Space))
+				// Swap first and last element
+				pLine := lines[len(lines)-2]
+				cLine := lines[len(lines)-1]
+				lines[len(lines)-2] = cLine
+				lines[len(lines)-1] = pLine
+			} else {
+				lines = append(lines, cleaner.ReplaceAllString(strings.TrimSpace(line), Space))
+			}
+			line = ""
+			tokenReached = false
+		} else if strings.HasPrefix(line, MultiLineCommentInitiator) && strings.HasSuffix(line, MultilineCommentTerminator) {
+			lines = append(lines, cleaner.ReplaceAllString(line, Space))
+			line = ""
+		} else {
+			if rune != EndL {
+				if rune == Space {
+					if len(line) > 0 {
+						line += rune
+					}
+				} else {
+					line += rune
+				}
+			} else {
+				// Add a space to account for new lines in multiline comment
+				if strings.HasPrefix(line, MultiLineCommentInitiator) {
+					line += Space
+				}
+				tokenReached = false
+			}
+		}
+	}
+	return lines
 }
