@@ -1,0 +1,46 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "proto",
+    srcs = [
+        "annotation.go",
+        "attribute.go",
+        "attribute_visitor.go",
+        "comment.go",
+        "comment_visitor.go",
+        "constants.go",
+        "enum.go",
+        "enum_value.go",
+        "enum_value_visitor.go",
+        "enum_visitor.go",
+        "import.go",
+        "import_visitor.go",
+        "interfaces.go",
+        "line.go",
+        "logger.go",
+        "message.go",
+        "message_visitor.go",
+        "model.go",
+        "option_visitor.go",
+        "package.go",
+        "package_visitor.go",
+        "protobuf_file_scanner.go",
+        "reserved.go",
+        "reserved_visitor.go",
+        "rpc.go",
+        "rpc_visitor.go",
+        "service.go",
+        "service_visitor.go",
+        "util.go",
+        "variables.go",
+    ],
+    importpath = "github.com/rrmcguinness/proto-diagram-tool/pkg/proto",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "proto_test",
+    srcs = ["comment_visitor_test.go"],
+    embed = [":proto"],
+    deps = ["@com_github_stretchr_testify//assert"],
+)
