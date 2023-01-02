@@ -63,11 +63,11 @@ func (m *Message) ToMermaid() string {
 	// Handle Attribute Relationships
 	for _, a := range m.Attributes {
 		if len(a.Kind) == 1 {
-			if !strings.Contains(Proto3Types, a.Kind[0]) {
+			if !strings.Contains(Protobuf3Types, a.Kind[0]) {
 				out += fmt.Sprintf("%s --> `%s`\n", m.Name, a.Kind[0])
 			}
 		} else if len(a.Kind) == 2 {
-			if !strings.Contains(Proto3Types, strings.TrimSpace(a.Kind[1])) {
+			if !strings.Contains(Protobuf3Types, strings.TrimSpace(a.Kind[1])) {
 				out += fmt.Sprintf("%s .. `%s`\n", m.Name, a.Kind[1])
 			}
 		}

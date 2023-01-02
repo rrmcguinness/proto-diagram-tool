@@ -29,6 +29,8 @@ func NewAnnotation(name string, value any) *Annotation {
 	return &Annotation{Name: name, Value: value}
 }
 
+// ParseAnnotations is used for reading the annotation line and marshalling it into
+// the annotation structure.
 func ParseAnnotations(in string) []*Annotation {
 	Log.Debug("Processing Annotation")
 	out := make([]*Annotation, 0)

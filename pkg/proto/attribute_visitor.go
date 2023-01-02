@@ -38,6 +38,7 @@ func (av attributeVisitor) CanVisit(in *Line) bool {
 		strings.HasPrefix(in.Syntax, "map") || len(in.SplitSyntax()) >= 4
 }
 
+// handleRepeated marshals the attribute into a repeated representation, e.g. List.
 func handleRepeated(out *Attribute, split []string) {
 	Log.Debugf("\t processing repeated attribute %s", split[2])
 	// 0 - 4 repeated, type, name, equals, ordinal
@@ -47,6 +48,7 @@ func handleRepeated(out *Attribute, split []string) {
 	out.Ordinal = ParseOrdinal(split[4])
 }
 
+// handleMap marshals the attribute into a Map type by using multiple types for key and value.
 func handleMap(out *Attribute, split []string) {
 	Log.Debugf("\t processing map attribute %s", split[2])
 	// map1, map2, name, equals, ordinal
@@ -59,6 +61,7 @@ func handleMap(out *Attribute, split []string) {
 	out.Ordinal = ParseOrdinal(split[4])
 }
 
+// handleDefaultAttribute marshals a standard attribute type.
 func handleDefaultAttribute(out *Attribute, split []string) {
 	Log.Debugf("\t processing standard attribute %s", split[1])
 	out.Name = split[1]
@@ -66,6 +69,7 @@ func handleDefaultAttribute(out *Attribute, split []string) {
 	out.Ordinal = ParseOrdinal(split[3])
 }
 
+// Visit is used for marshalling an attribute into a struct.
 func (av attributeVisitor) Visit(_ Scanner, in *Line, namespace string) interface{} {
 	Log.Debug("Visiting Attribute")
 	out := NewAttribute(namespace, in.Comment)

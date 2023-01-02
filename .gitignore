@@ -25,3 +25,7 @@ proto-diagram
 
 # Go workspace file
 go.work
+
+proto-diagram
+
+target/

@@ -20,6 +20,7 @@ import (
 	"strings"
 )
 
+// NewEnumVisitor creates an EnumVisitor
 func NewEnumVisitor() *EnumVisitor {
 	Log.Debug("Initializing EnumVisitor")
 	out := &EnumVisitor{visitors: make([]Visitor, 0)}
@@ -29,20 +30,23 @@ func NewEnumVisitor() *EnumVisitor {
 	return out
 }
 
+// EnumVisitor is responsible for evaluation and marshalling of an Enum entity.
 type EnumVisitor struct {
 	visitors []Visitor
 }
 
+// CanVisit determines if the current line is an enumeration.
 func (ev *EnumVisitor) CanVisit(in *Line) bool {
 	return strings.HasPrefix(in.Syntax, "enum ") && in.Token == OpenBrace
 }
 
+// Visit marshals a line and subsequent lines of the enumeration until the terminator is found.
 func (ev *EnumVisitor) Visit(scanner Scanner, in *Line, namespace string) interface{} {
 	Log.Debugf("Visiting Enum: %d registered visitors\n", len(ev.visitors))
 	fValues := in.SplitSyntax()
 	out := NewEnum(namespace, fValues[1], in.Comment)
 
-	var comment = Comment("")
+	var comment = Comment(Empty)
 
 	for scanner.Scan() {
 		n := scanner.ReadLine()

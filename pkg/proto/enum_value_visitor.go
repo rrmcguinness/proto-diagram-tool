@@ -16,14 +16,17 @@
 
 package proto
 
+// EnumValueVisitor is responsible evaluating and processing Protobuf Enumerations.
 type EnumValueVisitor struct {
 }
 
+// CanVisit determines if the line is an enumeration.
 func (evv EnumValueVisitor) CanVisit(in *Line) bool {
 	a := in.SplitSyntax()
 	return a != nil && len(a) == 3 && in.Token == Semicolon
 }
 
+// Visit marshals a line into an enumeration
 func (evv EnumValueVisitor) Visit(_ Scanner, in *Line, namespace string) interface{} {
 	a := in.SplitSyntax()
 	return NewEnumValue(namespace, a[2], a[0], in.Comment)

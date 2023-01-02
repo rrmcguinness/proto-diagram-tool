@@ -36,6 +36,7 @@ func NewEnum(q string, name string, comment Comment) *Enum {
 	}
 }
 
+// ToMermaid prints a mermaid representation of the Enum
 func (e Enum) ToMermaid() string {
 	out := fmt.Sprintf("%s\nclass %s{\n  <<enumeration>>\n", e.Comment.ToMermaid(), e.Name)
 	for _, v := range e.Values {

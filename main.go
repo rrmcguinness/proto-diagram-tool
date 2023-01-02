@@ -19,17 +19,16 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
+	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/rrmcguinness/proto-diagram/pkg/proto"
 )
 
 var directory *string
 var recursive *bool
 var debug *bool
+var output *string
 
 const (
 	ProtoSuffix = ".proto"
@@ -39,15 +38,8 @@ func init() {
 	directory = flag.String("d", ".", "The directory to read.")
 	recursive = flag.Bool("r", true, "Read recursively.")
 	debug = flag.Bool("debug", false, "Enable debugging")
+	output = flag.String("o", ".", "Specifies the output directory, if not specified, the processor will write markdown in the proto directories.")
 }
-
-var mdTemplate = `
-# %s
-
-## Comments
-%s
-
-` + "```mermaid\n%s\n```\n\n"
 
 func main() {
 	flag.Parse()
@@ -86,7 +78,7 @@ func main() {
 		out := dir + string(filepath.Separator) + bName + ".md"
 		err = os.WriteFile(out, []byte(pkg.ToMarkdownWithDiagram()), 0644)
 		if err != nil {
-			fmt.Printf("failed to write file %v\n", err)
+			logger.Errorf("failed to write file %v\n", err)
 		}
 	}
 

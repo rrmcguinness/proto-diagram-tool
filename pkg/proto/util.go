@@ -18,7 +18,6 @@ package proto
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"regexp"
 	"strconv"
@@ -36,7 +35,7 @@ func RemoveDoubleQuotes(in string) string {
 func ParseOrdinal(in string) int {
 	i, err := strconv.ParseInt(in, 10, 64)
 	if err != nil {
-		fmt.Printf("Failed to parse %s for integer", in)
+		Log.Debugf("Failed to parse %s for integer", in)
 		return 0
 	}
 	return int(i)

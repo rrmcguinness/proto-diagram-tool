@@ -21,10 +21,12 @@ package proto
 type CommentVisitor struct {
 }
 
+// CanVisit Determines if the line is a coment
 func (cv *CommentVisitor) CanVisit(in *Line) bool {
 	return in.Token == InlineCommentPrefix || in.Token == MultiLineCommentInitiator
 }
 
+// Visit marshals a line into a Comment struct.
 func (cv *CommentVisitor) Visit(scanner Scanner, in *Line, _ string) interface{} {
 	Log.Debug("Visiting Comment")
 	return in.Comment

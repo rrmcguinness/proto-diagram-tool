@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
+// Package proto houses all logic for processing protocol buffers into
+// an easy-to-use structure for creating diagrams output. The intention is to
+// support a verity of diagram types such as Mermaid and Plant UML.
+// Since Go does not support logical libraries, these are loaded via direction
+// implementations. ToMermaid() and ToPlantUML(). Please note, since this is
+// a Go implementation, the Plant UML diagrams are syntax only, and the Java
+// diagram compiler is not currently used.
 package proto
 
 import "bufio"
 
+// MermaidAware is an interface used to print Mermaid diagrams.
+// and is called at the package level.
 type MermaidAware interface {
 	ToMermaid() string
 }
