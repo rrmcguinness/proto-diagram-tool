@@ -26,8 +26,8 @@ option java_package = "com.github.rrmcguinness.proto.test.location";
 option java_multiple_files = true;
 
 service LocationService {
-  rpc List(google.protobuf.Empty)
-    returns (stream test.location.PhysicalLocation) {
+  rpc List(google.protobuf.Empty) returns (stream test.location.PhysicalLocation) {
+      // Creates the get location
       option (google.api.http) = {
         get: "/locations"
       };

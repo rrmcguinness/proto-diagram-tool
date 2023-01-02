@@ -62,7 +62,7 @@ func (ev *EnumVisitor) Visit(scanner Scanner, in *Line, namespace string) interf
 					out.Values = append(out.Values, t)
 					comment = comment.Clear()
 				case Comment:
-					comment = t.AddSpace()
+					comment = comment.Append(t).AddSpace()
 				default:
 					Log.Infof("unable to parse enum value: %t", t)
 				}

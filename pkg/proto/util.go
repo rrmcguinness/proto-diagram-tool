@@ -109,5 +109,10 @@ func ReadFileToArray(file *os.File) []string {
 			}
 		}
 	}
+	if Log.debug {
+		for i, l := range lines {
+			Log.Debugf("%d. %s", i, l)
+		}
+	}
 	return lines
 }

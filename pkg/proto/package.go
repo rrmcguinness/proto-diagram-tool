@@ -30,6 +30,7 @@ type Package struct {
 	Imports  []*Import
 	Messages []*Message
 	Enums    []*Enum
+	Services []*Service
 }
 
 func NewPackage(path string) *Package {
@@ -38,6 +39,7 @@ func NewPackage(path string) *Package {
 		Imports:  make([]*Import, 0),
 		Messages: make([]*Message, 0),
 		Enums:    make([]*Enum, 0),
+		Services: make([]*Service, 0),
 	}
 	return pkg
 }
@@ -78,6 +80,10 @@ func (p *Package) Read(debug bool) error {
 					t.Comment = comment.AddSpace().Append(line.Comment).TrimSpace()
 					p.Enums = append(p.Enums, t)
 					comment = comment.Clear()
+				case *Service:
+					t.Comment = comment.AddSpace().Append(line.Comment).TrimSpace()
+					p.Services = append(p.Services, t)
+					comment = comment.Clear()
 				case *Package:
 					t.Comment = comment.AddSpace().Append(line.Comment).TrimSpace()
 					p.Name = t.Name
@@ -103,6 +109,10 @@ func (p Package) ToMermaid() string {
 
 	for _, e := range p.Enums {
 		out += e.ToMermaid()
+	}
+
+	for _, s := range p.Services {
+		out += s.ToMermaid()
 	}
 
 	return out

@@ -32,7 +32,7 @@ func (mv *MessageVisitor) CanVisit(in *Line) bool {
 // Visit evaluates the current line and parses the message until the closed brace
 // is evaluated.
 func (mv *MessageVisitor) Visit(scanner Scanner, in *Line, namespace string) interface{} {
-	Log.Debugf("Visiting Message: %s\n", in)
+	Log.Debugf("Visiting Message: %v\n", in)
 
 	values := in.SplitSyntax()
 	out := NewMessage()
