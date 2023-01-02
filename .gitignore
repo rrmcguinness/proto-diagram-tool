@@ -28,8 +28,8 @@ go.work
 
 proto-diagram
 
-target/
-bazel-bin/
-bazel-out/
-bazel-testlogs/
-bazel-proto-diagram-tool/
+/target/
+/bazel-bin/
+/bazel-out/
+/bazel-proto-diagram-tool/
+/bazel-testlogs/
