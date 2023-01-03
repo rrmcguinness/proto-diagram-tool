@@ -25,22 +25,3 @@ jobs:
 
       - name: "Build"
         run: bazel build //...
-
-      - name: Checkout Go Branch
-        if: github.ref == 'refs/heads/main'
-        uses: actions/checkout@v3
-        with:
-          ref: 'go'
-          clean: 'false'
-
-      - name: Expand Go Module Library
-        if: github.ref == 'refs/heads/main'
-        run: |
-          echo "Unzipping Build Updates"
-          tar -zxf "${GITHUB_WORKSPACE}/bazel-bin/sdk/go/go_api_archive.tar.gz" -C ./
-
-      - name: Check-in Latest Go Changes
-        if: github.ref == 'refs/heads/main'
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: "Build Robot"
