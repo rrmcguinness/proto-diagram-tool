@@ -2,13 +2,7 @@
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
 
-/.idea
-/target/
-/bazel-bin/
-/bazel-out/
-/bazel-proto-diagram-tool/
-/bazel-testlogs/
-/test/**/*.md
+
 
 # IntelliJ Idea
 *.iml
@@ -35,4 +29,9 @@
 # Go workspace file
 go.work
 
-
+.idea/
+target/
+bazel-bin/
+bazel-out/
+bazel-proto-diagram-tool/
+bazel-testlogs/

@@ -13,6 +13,13 @@ described in a Protobuf.
 If you find this useful, awesome! If you find a bug, please contribute a patch,
 or open a bug. Please follow the [Contributing](CONTRIBUTING.md) guidelines.
 
+## Examples
+
+* [Location Protobuf](test/protos/test/location/model.proto)
+* [Location Document](test/protos/test/location/model.proto.md)
+* [Location Service Protobuf](test/protos/test/service/service.proto)
+* [Location Service Document](test/protos/test/service/service.proto.md)
+
 ## Building
 ```shell
 // Clone
