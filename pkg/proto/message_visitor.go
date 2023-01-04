@@ -38,6 +38,7 @@ func (mv *MessageVisitor) Visit(scanner Scanner, in *Line, namespace string) int
 	out := NewMessage()
 
 	out.Name = values[1]
+	out.Qualifier = Join(Period, namespace, out.Name)
 	out.Comment = in.Comment
 
 	var comment = Comment("")
@@ -74,7 +75,7 @@ func (mv *MessageVisitor) Visit(scanner Scanner, in *Line, namespace string) int
 				case *Reserved:
 					out.Reserved = append(out.Reserved, t)
 				case Comment:
-					comment += comment.Append(t).AddSpace()
+					comment = comment.Append(t).AddSpace()
 				}
 			}
 		}

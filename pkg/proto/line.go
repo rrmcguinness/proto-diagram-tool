@@ -50,7 +50,7 @@ func NewLine(in string) *Line {
 	}
 	// Add Inline Comments
 	if !strings.HasPrefix(in, InlineCommentPrefix) && line.Token != MultiLineCommentInitiator && strings.Contains(in, InlineCommentPrefix) {
-		line.Comment += Comment(Space + strings.TrimSpace(in[strings.Index(in, InlineCommentPrefix)+len(InlineCommentPrefix):]))
+		line.Comment = Comment(Space + strings.TrimSpace(in[strings.Index(in, InlineCommentPrefix)+len(InlineCommentPrefix):]))
 	}
 	line.Comment = line.Comment.TrimSpace()
 	return line

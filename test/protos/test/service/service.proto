@@ -12,7 +12,7 @@ limitations under the License.
 */
 syntax = "proto3";
 
-package test.location;
+package test.service;
 
 import "test/location/model.proto";
 import "google/protobuf/empty.proto";

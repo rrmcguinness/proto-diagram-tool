@@ -19,7 +19,7 @@ package proto
 // NamedValue is super class to capture names and values for typed lines.
 type NamedValue struct {
 	Name    string
-	Value   any
+	Value   string
 	Comment Comment
 }
 
