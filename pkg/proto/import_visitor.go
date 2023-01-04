@@ -17,7 +17,6 @@
 package proto
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -29,7 +28,7 @@ func (iv *ImportVisitor) CanVisit(in *Line) bool {
 }
 
 func (iv *ImportVisitor) Visit(_ Scanner, in *Line, _ string) interface{} {
-	fmt.Println("Visiting Import")
+	Log.Debug("Visiting Import")
 	fValues := in.SplitSyntax()
 	return NewImport(RemoveDoubleQuotes(RemoveSemicolon(fValues[1])))
 }

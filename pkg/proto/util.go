@@ -75,6 +75,7 @@ func ReadFileToArray(file *os.File) []string {
 			tokenReached = true
 			line = ""
 		} else if strings.HasPrefix(line, InlineCommentPrefix) && rune == EndL {
+			// Swap the comment with the tokenized line, accounting for: [{|;|}] //some comment
 			if tokenReached {
 				lines = append(lines, cleaner.ReplaceAllString(strings.TrimSpace(line), Space))
 				// Swap first and last element
@@ -88,7 +89,7 @@ func ReadFileToArray(file *os.File) []string {
 			line = ""
 			tokenReached = false
 		} else if strings.HasPrefix(line, MultiLineCommentInitiator) && strings.HasSuffix(line, MultilineCommentTerminator) {
-			lines = append(lines, cleaner.ReplaceAllString(line, Space))
+			lines = append(lines, cleaner.ReplaceAllString(strings.TrimSpace(line), Space))
 			line = ""
 		} else {
 			if rune != EndL {
@@ -114,4 +115,14 @@ func ReadFileToArray(file *os.File) []string {
 		}
 	}
 	return lines
+}
+
+// RemoveNameQualification formats a parameter into a single name, this is due
+// to a limitation in Mermaid that DOES NOT support fully qualified names.
+func RemoveNameQualification(in string) string {
+	if strings.Contains(in, Period) {
+		return in[strings.LastIndex(in, Period)+1:]
+	} else {
+		return in
+	}
 }

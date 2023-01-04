@@ -19,15 +19,17 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 )
 
 var directory *string
 var recursive *bool
 var debug *bool
+var visualize *bool
 var output *string
 
 const (
@@ -38,7 +40,22 @@ func init() {
 	directory = flag.String("d", ".", "The directory to read.")
 	recursive = flag.Bool("r", true, "Read recursively.")
 	debug = flag.Bool("debug", false, "Enable debugging")
+	visualize = flag.Bool("v", true, "Enable Visualization")
 	output = flag.String("o", ".", "Specifies the output directory, if not specified, the processor will write markdown in the proto directories.")
+}
+
+func debugPackages(packages []*proto.Package, logger *proto.Logger) {
+	if *debug {
+		enc := json.NewEncoder(os.Stdout)
+		enc.SetIndent("", "  ")
+
+		for _, pkg := range packages {
+			err := enc.Encode(pkg)
+			if err != nil {
+				logger.Errorf("Error encoding package %v", err)
+			}
+		}
+	}
 }
 
 func main() {
@@ -69,29 +86,22 @@ func main() {
 		return nil
 	})
 
-	enc := json.NewEncoder(os.Stdout)
-	enc.SetIndent("", "  ")
+	// Send output to debug if enabled.
+	debugPackages(packages, logger)
+
+	if err != nil {
+		logger.Errorf("failed to process directory: %s with error: %v", *directory, err)
+	}
 
 	for _, pkg := range packages {
 		dir := filepath.Dir(pkg.Path)
 		bName := filepath.Base(pkg.Path)
 		out := dir + string(filepath.Separator) + bName + ".md"
-		err = os.WriteFile(out, []byte(pkg.ToMarkdownWithDiagram()), 0644)
+		markdown := proto.PackageToMarkDown(pkg, *visualize)
+		err = os.WriteFile(out, []byte(markdown), 0644)
 		if err != nil {
 			logger.Errorf("failed to write file %v\n", err)
 		}
 	}
 
-	if *debug {
-		for _, pkg := range packages {
-			err := enc.Encode(pkg)
-			if err != nil {
-				logger.Errorf("Error encoding package %v", err)
-			}
-		}
-
-		if err != nil {
-			logger.Errorf("failed to process directory: %s with error: %v", *directory, err)
-		}
-	}
 }

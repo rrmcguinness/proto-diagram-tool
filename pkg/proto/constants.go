@@ -34,6 +34,8 @@ const (
 	ClosedBracket     = "]"
 	Semicolon         = ";"
 	Comma             = ","
+	Pipe              = "|"
+	Hyphen            = "-"
 
 	InlineCommentPrefix        = "//"
 	MultiLineCommentInitiator  = "/*"
@@ -43,4 +45,11 @@ const (
 	DoubleQuote                = `"`
 	SingleQuote                = `'`
 	EndL                       = "\n"
+)
+
+// From gist: https://gist.github.com/ik5/d8ecde700972d4378d87
+const (
+	InfoColor  = "\033[1;32mINFO: %s\033[0m"
+	ErrorColor = "\033[1;31mERROR: %s\033[0m"
+	DebugColor = " \033[0;36mDEBUG: %s\033[0m"
 )

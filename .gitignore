@@ -2,10 +2,19 @@
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
 
-.idea
+/.idea
+/target/
+/bazel-bin/
+/bazel-out/
+/bazel-proto-diagram-tool/
+/bazel-testlogs/
+/test/**/*.md
+
+# IntelliJ Idea
 *.iml
 
-proto-diagram
+# The program executable
+/proto-diagram-tool
 
 # Binaries for programs and plugins
 *.exe
@@ -26,10 +35,4 @@ proto-diagram
 # Go workspace file
 go.work
 
-proto-diagram
 
-/target/
-/bazel-bin/
-/bazel-out/
-/bazel-proto-diagram-tool/
-/bazel-testlogs/

@@ -17,7 +17,6 @@
 package proto
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -33,7 +32,7 @@ func (ov *OptionVisitor) CanVisit(in *Line) bool {
 }
 
 func (ov *OptionVisitor) Visit(_ Scanner, in *Line, _ string) interface{} {
-	fmt.Println("Visiting Option")
+	Log.Debug("Visiting Option")
 	fValues := in.SplitSyntax()
 	if len(fValues) == 4 {
 		return &Option{&NamedValue{

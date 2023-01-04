@@ -16,8 +16,6 @@
 
 package proto
 
-import "fmt"
-
 // Enum represents a Proto Enum type.
 type Enum struct {
 	*Qualified
@@ -34,14 +32,4 @@ func NewEnum(q string, name string, comment Comment) *Enum {
 		},
 		Values: make([]*EnumValue, 0),
 	}
-}
-
-// ToMermaid prints a mermaid representation of the Enum
-func (e Enum) ToMermaid() string {
-	out := fmt.Sprintf("%s\nclass %s{\n  <<enumeration>>\n", e.Comment.ToMermaid(), e.Name)
-	for _, v := range e.Values {
-		out += fmt.Sprintf("  %s\n", v.Value)
-	}
-	out += "}"
-	return out
 }

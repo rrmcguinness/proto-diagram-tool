@@ -16,11 +16,6 @@
 
 package proto
 
-import (
-	"fmt"
-	"strings"
-)
-
 type Service struct {
 	*Qualified
 	Methods []*Rpc
@@ -39,64 +34,4 @@ func NewService(namespace string, name string, comment Comment) *Service {
 
 func (s *Service) AddRpc(rpc ...*Rpc) {
 	s.Methods = append(s.Methods, rpc...)
-}
-
-func CleanParameterName(in string) string {
-	if strings.Contains(in, Period) {
-		return in[strings.LastIndex(in, Period)+1:]
-	} else {
-		return in
-	}
-}
-
-func FormatParameters(in []*Parameter) string {
-	out := ""
-	for i := 0; i < len(in); i++ {
-		p := in[i]
-		if p.Stream {
-			out += fmt.Sprintf("Stream~%s~", CleanParameterName(p.Type))
-		} else {
-			out += CleanParameterName(in[i].Type)
-		}
-		if i < len(in)-1 {
-			out += ","
-		}
-	}
-	return out
-}
-
-func FormatRelationships(name string, in []*Parameter) string {
-	out := ""
-	for _, i := range in {
-		t := strings.TrimSpace(i.Type)
-		if strings.HasSuffix(t, name) {
-			t = CleanParameterName(t)
-		}
-
-		if i.Stream {
-			out += fmt.Sprintf("%s --o `%s`\n", name, t)
-		} else {
-			out += fmt.Sprintf("%s --> `%s`\n", name, t)
-		}
-	}
-	return out
-}
-
-func (s *Service) ToMermaid() string {
-	relationships := ""
-
-	out := fmt.Sprintf("class %s {\n  <<service>>\n", s.Name)
-	for _, m := range s.Methods {
-		out += fmt.Sprintf("  +%s(%s) %s\n",
-			m.Name,
-			FormatParameters(m.InputParameters),
-			FormatParameters(m.ReturnParameters))
-
-		relationships += FormatRelationships(s.Name, m.InputParameters)
-		relationships += FormatRelationships(s.Name, m.ReturnParameters)
-	}
-	out += "}\n"
-	out += relationships
-
-	return out
 }

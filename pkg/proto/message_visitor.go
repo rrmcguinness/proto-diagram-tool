@@ -74,7 +74,7 @@ func (mv *MessageVisitor) Visit(scanner Scanner, in *Line, namespace string) int
 				case *Reserved:
 					out.Reserved = append(out.Reserved, t)
 				case Comment:
-					comment = comment.Append(t).AddSpace()
+					comment += comment.Append(t).AddSpace()
 				}
 			}
 		}

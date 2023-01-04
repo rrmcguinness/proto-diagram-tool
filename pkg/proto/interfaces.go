@@ -25,12 +25,6 @@ package proto
 
 import "bufio"
 
-// MermaidAware is an interface used to print Mermaid diagrams.
-// and is called at the package level.
-type MermaidAware interface {
-	ToMermaid() string
-}
-
 // Validatable is a reference interface for the validator pattern
 type Validatable interface {
 	IsValid() bool

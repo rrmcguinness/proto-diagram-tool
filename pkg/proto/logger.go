@@ -23,28 +23,34 @@ type Logger struct {
 	debug bool
 }
 
+// Debug prints messages with a DEBUG prefix and only if debug is enabled.
 func (l Logger) Debug(in string) {
 	if l.debug {
-		fmt.Printf("DEBUG: %s\n", in)
+		fmt.Printf(DebugColor, in)
 	}
 }
 
+// Debugf prints a formatted debug string.
 func (l Logger) Debugf(in string, args ...any) {
 	l.Debug(fmt.Sprintf(in, args...))
 }
 
+// Error prints a red error output
 func (l Logger) Error(in string) {
-	fmt.Printf("ERROR: %s\n", in)
+	fmt.Printf(ErrorColor, in)
 }
 
+// Errorf prints a formatted error
 func (l Logger) Errorf(in string, args ...any) {
 	l.Error(fmt.Sprintf(in, args...))
 }
 
+// Info prints an information statement to output in teal.
 func (l Logger) Info(in string) {
-	fmt.Printf("INFO: %s\n", in)
+	fmt.Printf(InfoColor, in)
 }
 
+// Infof prints a formatted info stream
 func (l Logger) Infof(in string, args ...any) {
 	l.Info(fmt.Sprintf(in, args...))
 }

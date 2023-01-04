@@ -25,6 +25,9 @@ option go_package = "github.com/rrmcguinness/proto/test/location";
 option java_package = "com.github.rrmcguinness.proto.test.location";
 option java_multiple_files = true;
 
+/*
+The LocationService is responsible for CRUD operations of Physical Locations.
+ */
 service LocationService {
   rpc List(google.protobuf.Empty) returns (stream test.location.PhysicalLocation) {
       // Creates the get location

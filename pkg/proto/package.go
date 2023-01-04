@@ -100,28 +100,10 @@ func (p *Package) Read(debug bool) error {
 	return nil
 }
 
-func (p Package) ToMermaid() string {
-	out := fmt.Sprintf(`%%%%`+" Mermaid Diagram for package: %s\n", p.Name)
-
-	for _, m := range p.Messages {
-		out += m.ToMermaid()
-	}
-
-	for _, e := range p.Enums {
-		out += e.ToMermaid()
-	}
-
-	for _, s := range p.Services {
-		out += s.ToMermaid()
-	}
-
-	return out
-}
-
-func (p Package) ToMarkdownWithDiagram() string {
+func (p *Package) ToMarkdownWithDiagram() string {
 	out := fmt.Sprintf("# %s\n\n%s\n# Diagrams\n", p.Name, p.Comment)
 	out += "```mermaid\nclassDiagram\n"
-	out += p.ToMermaid()
+	out += PackageToMermaid(p)
 	out += "\n```"
 	return out
 }

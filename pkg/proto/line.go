@@ -33,7 +33,7 @@ func NewLine(in string) *Line {
 		line.Token = InlineCommentPrefix
 	} else if strings.HasPrefix(in, MultiLineCommentInitiator) {
 		// Handle Multiline Comments
-		line.Comment = Comment(strings.TrimSpace(in[strings.Index(in, MultiLineCommentInitiator)+len(MultiLineCommentInitiator):]))
+		line.Comment = Comment(strings.TrimSpace(in[strings.Index(in, MultiLineCommentInitiator)+len(MultiLineCommentInitiator) : len(in)-len(MultilineCommentTerminator)]))
 		line.Token = MultiLineCommentInitiator
 	} else if strings.Contains(in, Semicolon) {
 		// Handle Syntax Stings
@@ -49,7 +49,7 @@ func NewLine(in string) *Line {
 		line.Token = CloseBrace
 	}
 	// Add Inline Comments
-	if !strings.HasPrefix(in, InlineCommentPrefix) && strings.Contains(in, InlineCommentPrefix) {
+	if !strings.HasPrefix(in, InlineCommentPrefix) && line.Token != MultiLineCommentInitiator && strings.Contains(in, InlineCommentPrefix) {
 		line.Comment += Comment(Space + strings.TrimSpace(in[strings.Index(in, InlineCommentPrefix)+len(InlineCommentPrefix):]))
 	}
 	line.Comment = line.Comment.TrimSpace()
