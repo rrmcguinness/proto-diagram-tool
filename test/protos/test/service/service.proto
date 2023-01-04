@@ -29,6 +29,7 @@ option java_multiple_files = true;
 The LocationService is responsible for CRUD operations of Physical Locations.
  */
 service LocationService {
+  // List returns a list of physical locations
   rpc List(google.protobuf.Empty) returns (stream test.location.PhysicalLocation) {
       // Creates the get location
       option (google.api.http) = {

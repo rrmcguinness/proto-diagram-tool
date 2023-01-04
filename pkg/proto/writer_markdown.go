@@ -53,13 +53,13 @@ func EnumToMarkdown(enum *Enum, visualize bool) (body string, diagram string) {
 	if visualize {
 		diagram = "\n" + ToMermaid(enum.Name, enum)
 	}
-	body = fmt.Sprintf("## Enum: %s\n####### FQN: %s\n\n%s\n\n%s\n\n", enum.Name, enum.Qualifier, enum.Comment, enumTable.String())
+	body = fmt.Sprintf("## Enum: %s\n%s\n\n%s\n\n%s\n\n", enum.Name, fmt.Sprintf(fqn, enum.Qualifier), enum.Comment, enumTable.String())
 	return body, diagram
 }
 
 func MessageToMarkdown(message *Message, visualize bool) (body string, diagram string) {
 	attributeTable := NewMarkdownTable()
-	attributeTable.AddHeader("Field", "Type", "Label", "Description")
+	attributeTable.AddHeader("Field", "Ordinal", "Type", "Label", "Description")
 
 	sort.Slice(message.Attributes, func(i, j int) bool {
 		v := strings.Compare(message.Attributes[i].Name, message.Attributes[j].Name)
@@ -73,14 +73,14 @@ func MessageToMarkdown(message *Message, visualize bool) (body string, diagram s
 		} else if a.Repeated {
 			label = "Repeated"
 		}
-		attributeTable.Insert(a.Name, strings.Join(a.Kind, Comma), label, string(a.Comment))
+		attributeTable.Insert(a.Name, strconv.Itoa(a.Ordinal), strings.Join(a.Kind, Comma), label, string(a.Comment))
 	}
 
 	if visualize {
 		diagram = "\n" + ToMermaid(message.Name, message)
 	}
 
-	body = fmt.Sprintf("## Message: %s\n###### FQN: %s\n\n%s\n\n%s\n\n", message.Name, message.Qualifier, message.Comment, attributeTable.String())
+	body = fmt.Sprintf("## Message: %s\n%s\n\n%s\n\n%s\n\n", message.Name, fmt.Sprintf(fqn, message.Qualifier), message.Comment, attributeTable.String())
 
 	for _, e := range message.Enums {
 		eBody, eDiagram := EnumToMarkdown(e, visualize)
@@ -115,7 +115,7 @@ func ServiceToMarkdown(s *Service, visualize bool) string {
 		table += "\n" + ToMermaid(s.Name, s)
 	}
 
-	return fmt.Sprintf("## Service: %s\n###### FQN: %s\n\n%s\n\n%s\n\n", s.Name, s.Qualifier, s.Comment, table)
+	return fmt.Sprintf("## Service: %s\n%s\n\n%s\n\n%s\n\n", s.Name, fmt.Sprintf(fqn, s.Qualifier), s.Comment, table)
 }
 
 func HandleEnums(enums []*Enum, visualize bool) (body string) {
@@ -130,18 +130,17 @@ func HandleEnums(enums []*Enum, visualize bool) (body string) {
 	return body + diagrams
 }
 
-func HandleMessages(messages []*Message, visualize bool) string {
-	out := ""
+func HandleMessages(messages []*Message, visualize bool) (body string) {
+	diagrams := ""
 	if messages != nil {
 		for _, m := range messages {
-			body, diagram := MessageToMarkdown(m, visualize)
-			out += body
-			out += HandleEnums(m.Enums, false)
-			out += HandleMessages(m.Messages, false)
-			out += diagram
+			mBody, mDiagram := MessageToMarkdown(m, visualize)
+			body += mBody
+			body += HandleMessages(m.Messages, false)
+			diagrams += mDiagram
 		}
 	}
-	return out
+	return body + diagrams
 }
 
 func PackageFormatImports(p *Package) (body string) {
@@ -164,6 +163,27 @@ func PackageFormatOptions(p *Package) (body string) {
 	return body
 }
 
+const fqn = "<div class=\"fqn\">%s</div>"
+
+const styleSheet = `
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap');
+.fqn { font-size: 10px; margin-top: -10px; }
+.fqn:before{content: 'FQN: '}
+h1,h2,h3,h4,h5,td,span {
+		font-family: 'Montserrat', sans-serif;
+}
+th {
+		font-family: 'Montserrat', sans-serif;
+		font-weight: bold;
+}
+</style>
+`
+
+const footer = `
+<!-- Created by: Proto Diagram Tool -->
+<!-- https://github.com/rrmcguinness/proto-diagram-tool -->`
+
 func PackageToMarkDown(p *Package, visualize bool) string {
 	out := ""
 	if len(p.Services) > 0 {
@@ -171,10 +191,8 @@ func PackageToMarkDown(p *Package, visualize bool) string {
 			out += ServiceToMarkdown(s, visualize)
 		}
 	}
-
 	out += HandleEnums(p.Enums, visualize)
 	out += HandleMessages(p.Messages, visualize)
-
-	out = fmt.Sprintf("# Package: %s\n\n%s\n\n%s\n\n%s\n\n%s\n\n<!-- Created by: Proto Diagram Tool -->\n<!-- https://github.com/rrmcguinness/proto-diagram-tool -->\n", p.Name, PackageFormatImports(p), PackageFormatOptions(p), p.Comment, out)
+	out = fmt.Sprintf("%s\n# Package: %s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n", styleSheet, p.Name, p.Comment, PackageFormatImports(p), PackageFormatOptions(p), out, footer)
 	return out
 }

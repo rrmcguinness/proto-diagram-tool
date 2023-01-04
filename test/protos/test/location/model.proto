@@ -14,7 +14,7 @@ syntax = "proto3";
 
 package test.location;
 
-// Use Google Timestamp
+// Import google timestamp to identify
 import "google/protobuf/timestamp.proto";
 
 // Go Lang Options
@@ -24,37 +24,55 @@ option go_package = "github.com/rrmcguinness/proto/test/location";
 option java_package = "com.github.rrmcguinness.proto.test.location";
 option java_multiple_files = true;
 
-// A physical location
+// A physical location that can be described with either an address
+// or a set of geo coordinates.
 message PhysicalLocation {
-  // An address
+  // A postal address for the physical location.
   message Address {
-    // Determines the kind of address
-    enum Type {
-      RESIDENTIAL = 0; // Residential
-      // Business Super Cool
-      // Lots of docs
-      BUSINESS = 1; // Plus an inline comment
+    // Address type is used to identify the type of address.
+    enum AddressType {
+      RESIDENTIAL = 0; // A residential address
+      BUSINESS = 1; // A business address
     }
-    // Pre line 1, validating
-    string line1 = 1; // Line 1 Comment v2
+    // First line of the address
+    string line1 = 1;
+    // Second line of the address
     string line2 = 2;
+    // Third line of the address
     string line3 = 3;
+    // The city or township
     string city = 4;
+    // The state or province
     string state = 5;
+    // The postal code
     string zipcode = 6;
-    Type type = 7;
+    // The type of address
+    AddressType type = 7;
+    // Reserved for future use
     reserved 8 to 20;
   }
+  // The timestamp the record was created
+  google.protobuf.Timestamp created = 1;
+  // The mailing address of the location
   Address address = 2;
-  int32 longitude_degrees = 3 [json_name = 'lng_d']; // Longitude degrees
+  // Longitude degrees
+  int32 longitude_degrees = 3 [json_name = 'lng_d'];
   // Longitude Minutes
-  int32 longitude_minutes = 4 [json_name = 'lng_m']; // Plus Inline Longitude
+  int32 longitude_minutes = 4 [json_name = 'lng_m'];
+  // Longitude Seconds
   int32 longitude_seconds = 5 [json_name = 'lng_s'];
+  // Longitude Degrees
   int32 latitude_degrees = 6  [json_name = 'lat_d'];
+  // Latitude Minutes
   int32 latitude_minutes = 7  [json_name = 'lat_m'];
+  // Latitude Seconds
   int32 latitude_seconds = 8  [json_name = 'lat_s'];
+  // Latitude Direction Code
   string latitude_direction_code = 9  [json_name = 'lat_dir_code'];
+  // Altitude in Meters
   double altitude_meters = 10  [json_name = 'alt_m'];
-  map<string, string> meta = 11; // Dude
-  repeated string names = 12 [json_name = 'names']; // Comment
+  // Additional Meta Data
+  map<string, string> meta = 11;
+  // Names for the location
+  repeated string names = 12 [json_name = 'names'];
 }
