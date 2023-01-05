@@ -163,22 +163,7 @@ func PackageFormatOptions(p *Package) (body string) {
 	return body
 }
 
-const fqn = "<div class=\"fqn\">%s</div>"
-
-const styleSheet = `
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap');
-.fqn { font-size: 10px; margin-top: -10px; }
-.fqn:before{content: 'FQN: '}
-h1,h2,h3,h4,h5,td,span {
-		font-family: 'Montserrat', sans-serif;
-}
-th {
-		font-family: 'Montserrat', sans-serif;
-		font-weight: bold;
-}
-</style>
-`
+const fqn = "<div style=\"font-size: 12px; margin-top: -10px;\" class=\"fqn\">FQN: %s</div>"
 
 const footer = `
 <!-- Created by: Proto Diagram Tool -->
@@ -193,6 +178,6 @@ func PackageToMarkDown(p *Package, visualize bool) string {
 	}
 	out += HandleEnums(p.Enums, visualize)
 	out += HandleMessages(p.Messages, visualize)
-	out = fmt.Sprintf("%s\n# Package: %s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n", styleSheet, p.Name, p.Comment, PackageFormatImports(p), PackageFormatOptions(p), out, footer)
+	out = fmt.Sprintf("# Package: %s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n", p.Name, p.Comment, PackageFormatImports(p), PackageFormatOptions(p), out, footer)
 	return out
 }

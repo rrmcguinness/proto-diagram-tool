@@ -20,6 +20,10 @@ import (
 	"strings"
 )
 
+const (
+	MarkdownPadding = 2
+)
+
 type MarkdownTable struct {
 	header        []string
 	columnLengths []int
@@ -31,10 +35,11 @@ func NewMarkdownTable() *MarkdownTable {
 }
 
 func (mt *MarkdownTable) EvaluateWidth(i int, d string) {
+	dLen := len(d) + MarkdownPadding
 	if len(mt.columnLengths) == i {
-		mt.columnLengths = append(mt.columnLengths, len(d)+2)
-	} else if mt.columnLengths[i] < len(d) {
-		mt.columnLengths[i] = len(d) + 2
+		mt.columnLengths = append(mt.columnLengths, dLen)
+	} else if mt.columnLengths[i] < dLen {
+		mt.columnLengths[i] = dLen
 	}
 }
 

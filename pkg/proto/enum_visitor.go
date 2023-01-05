@@ -44,7 +44,7 @@ func (ev *EnumVisitor) CanVisit(in *Line) bool {
 func (ev *EnumVisitor) Visit(scanner Scanner, in *Line, namespace string) interface{} {
 	Log.Debugf("Visiting Enum: %d registered visitors\n", len(ev.visitors))
 	fValues := in.SplitSyntax()
-	out := NewEnum(namespace, fValues[1], in.Comment)
+	out := NewEnum(Join(Period, namespace, fValues[1]), fValues[1], in.Comment)
 
 	var comment = Comment(Empty)
 
