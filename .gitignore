@@ -8,7 +8,7 @@
 *.iml
 
 # The program executable
-/proto-diagram-tool
+proto-diagram-tool
 
 # Binaries for programs and plugins
 *.exe
