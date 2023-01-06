@@ -1,7 +1,8 @@
 # If you prefer the allow list template instead of the deny list, see community template:
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
-
+# macOS-specific excludes
+.DS_Store
 
 
 # IntelliJ Idea
@@ -30,8 +31,5 @@ proto-diagram-tool
 go.work
 
 .idea/
-target/
-bazel-bin/
-bazel-out/
-bazel-proto-diagram-tool/
-bazel-testlogs/
+/target*
+/bazel-*
