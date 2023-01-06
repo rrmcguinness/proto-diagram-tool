@@ -23,6 +23,10 @@ type NamedValue struct {
 	Comment Comment
 }
 
+func (namedValue *NamedValue) GetAnchor() string {
+	return NormalizeName(namedValue.Name)
+}
+
 // Qualified is a super class to capture namespace aware attributes and enums
 type Qualified struct {
 	Qualifier string

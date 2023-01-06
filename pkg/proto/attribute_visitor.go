@@ -63,10 +63,12 @@ func handleMap(out *Attribute, split []string) {
 
 // handleDefaultAttribute marshals a standard attribute type.
 func handleDefaultAttribute(out *Attribute, split []string) {
-	Log.Debugf("\t processing standard attribute %s", split[1])
-	out.Name = split[1]
-	out.Kind = append(out.Kind, split[0])
-	out.Ordinal = ParseOrdinal(split[3])
+	if len(split) >= 3 {
+		Log.Debugf("\t processing standard attribute %s", split[1])
+		out.Name = split[1]
+		out.Kind = append(out.Kind, split[0])
+		out.Ordinal = ParseOrdinal(split[3])
+	}
 }
 
 // Visit is used for marshalling an attribute into a struct.

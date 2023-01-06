@@ -22,6 +22,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 func RemoveSemicolon(in string) string {
@@ -56,6 +57,17 @@ func Join(joinCharacter string, values ...string) string {
 		}
 	}
 	return out
+}
+
+func NormalizeName(in string) string {
+	clean := ""
+	for i, r := range in {
+		if i > 0 && unicode.IsUpper(r) {
+			clean += Space
+		}
+		clean += string(r)
+	}
+	return strings.ReplaceAll(strings.ToLower(clean), Space, "_")
 }
 
 func ReadFileToArray(file *os.File) []string {

@@ -43,7 +43,17 @@ go_library(
 
 go_test(
     name = "proto_test",
-    srcs = ["comment_visitor_test.go"],
+    srcs = [
+        "annotation_test.go",
+        "attribute_test.go",
+        "attribute_visitor_test.go",
+        "comment_test.go",
+        "comment_visitor_test.go",
+        "util_test.go",
+    ],
+    data = [
+        "input_test_file.txt",
+    ],
     embed = [":proto"],
     deps = ["@com_github_stretchr_testify//assert"],
 )

@@ -27,7 +27,7 @@ func (c Comment) ToMermaid() string {
 
 // Append adds a comment to the end of an existing comment.
 func (c Comment) Append(other Comment) Comment {
-	c += Comment(strings.TrimSpace(string(other)))
+	c += Space + Comment(strings.TrimSpace(string(other)))
 	return c
 }
 
