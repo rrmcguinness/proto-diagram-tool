@@ -80,7 +80,6 @@ class AddressType{
 
 link AddressType "#addresstype" "See Definition"
 ```
-
 <a name="physicallocation"></a>
 ## PhysicalLocation 
 <div style="font-size: 12px; margin-top: -10px;" class="fqn">FQN: test.location.PhysicalLocation</div>
@@ -128,6 +127,8 @@ Address type is used to identify the type of address.
 |-------------|---------|-----------------------|
 | RESIDENTIAL | 0       | A residential address |
 | BUSINESS    | 1       | A business address    |
+
+
 
 <!-- Created by: Proto Diagram Tool -->
 <!-- https://github.com/rrmcguinness/proto-diagram-tool -->

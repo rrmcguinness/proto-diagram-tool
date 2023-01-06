@@ -39,6 +39,10 @@ cd proto-diagram-tool
 go build
 ```
 
+## CI/CD Pipeline
+The CI/CD Pipeline is run using Bazel and is responsible for building all
+platform build types.
+
 ## Use and Options
 
 ```shell
