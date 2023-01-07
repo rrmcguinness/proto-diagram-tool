@@ -49,11 +49,11 @@ go_test(
         "attribute_visitor_test.go",
         "comment_test.go",
         "comment_visitor_test.go",
+        "enum_test.go",
+        "enum_value_test.go",
         "util_test.go",
     ],
-    data = [
-        "input_test_file.txt",
-    ],
+    data = ["input_test_file.txt"],
     embed = [":proto"],
     deps = ["@com_github_stretchr_testify//assert"],
 )
