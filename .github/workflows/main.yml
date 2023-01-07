@@ -27,7 +27,12 @@ jobs:
         run: bazel test //...
 
       - name: "Coverage"
-        run: bazel coverage //...
+        run: bazel coverage --combined_report=lcov //...
+
+      - name: "Coverage Report"
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
 
       - name: "Build"
         run: bazel build //...
