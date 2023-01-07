@@ -23,5 +23,11 @@ jobs:
           path: "/home/runner/.cache/bazel"
           key: bazel
 
+      - name: "Test"
+        run: bazel test //...
+
+      - name: "Coverage"
+        run: bazel coverage //...
+
       - name: "Build"
         run: bazel build //...
