@@ -30,9 +30,13 @@ jobs:
         run: bazel coverage --combined_report=lcov //...
 
       - name: "Coverage Report"
-        uses: romeovs/lcov-reporter-action@v0.2.16
+        uses: zgosalvez/github-actions-report-lcov@v3
         with:
-          lcov-file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
+          coverage-files: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
+          minimum-coverage: 70
+          artifact-name: code-coverage-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: ./
 
       - name: "Build"
         run: bazel build //...
