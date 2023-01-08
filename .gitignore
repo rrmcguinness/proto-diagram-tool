@@ -21,7 +21,7 @@ proto-diagram-tool
 # Test binary, built with `go test -c`
 *.test
 
-# Output of the go coverage tool, specifically when used with LiteIDE
+# Output of the go _coverage tool, specifically when used with LiteIDE
 *.out
 
 # Dependency directories (remove the comment below to include it)
@@ -34,3 +34,4 @@ go.work
 .idea/
 /target*
 /bazel-*
+/_coverage
