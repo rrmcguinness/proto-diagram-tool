@@ -1,4 +1,4 @@
-name: Build
+name: Coverage
 
 on:
   push:
@@ -23,8 +23,5 @@ jobs:
           path: "/home/runner/.cache/bazel"
           key: bazel
 
-      - name: "Test"
-        run: bazel test //...
-
-      - name: "Build"
-        run: bazel build //...
+      - name: "Coverage"
+        run: bazel coverage //...

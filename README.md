@@ -1,4 +1,6 @@
-# Proto Diagram Utility
+# Proto Diagram Tool
+
+![status](https://github.com/rrmcguinness/proto-diagram-tool/actions/workflows/main.yml/badge.svg)
 
 This utility package is a compiled Go program that reads a protobuf
 source directory and generates Mermaid Diagrams in PROTO_DIAGRAM.md files

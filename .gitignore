@@ -30,6 +30,7 @@ proto-diagram-tool
 # Go workspace file
 go.work
 
+.fleet/
 .idea/
 /target*
 /bazel-*
