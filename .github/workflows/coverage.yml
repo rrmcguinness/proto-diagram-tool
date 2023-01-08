@@ -26,3 +26,7 @@ jobs:
       - name: "Coverage"
         run: bazel test //... && bazel coverage //... && third-party/lcov/bin/genhtml bazel-testlogs/pkg/proto/proto_test/coverage.dat -o ./target/coverage -t "Proto Diagram Tool"
 
+      - name: "Coverage Report"
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
