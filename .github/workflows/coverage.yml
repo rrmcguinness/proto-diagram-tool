@@ -24,5 +24,5 @@ jobs:
           key: bazel
 
       - name: "Coverage"
-        run: bazel build //... && bazel test //... && bazel coverage //... && third-party/lcov/bin/genhtml bazel-testlogs/pkg/proto/proto_test/coverage.dat -o ./target/coverage -t "Proto Diagram Tool"
+        run: bazel test //... && bazel coverage //... && third-party/lcov/bin/genhtml bazel-testlogs/pkg/proto/proto_test/coverage.dat -o ./target/coverage -t "Proto Diagram Tool"
 
