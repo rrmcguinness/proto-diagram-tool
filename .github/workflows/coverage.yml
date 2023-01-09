@@ -32,3 +32,20 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
           lcov-base: ${env.GITHUB_WORKSPACE}
+
+      - name: "Comment to Environment"
+        env:
+          BODY: ${{ github.event.comment.body }}
+        run: echo "COVERAGE=$BODY" >> $GITHUB_ENV
+
+      - name: Create the Badge
+        uses: schneegans/dynamic-badges-action@v1.6.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          filename: coverage.json
+          label: Coverage
+          message: ${{ env.COVERAGE }}
+          valColorRange: ${{ env.COVERAGE }}
+          maxColorRange: 100
+          minColorRange: 0
+          namedLogo: "Google Cloud"
