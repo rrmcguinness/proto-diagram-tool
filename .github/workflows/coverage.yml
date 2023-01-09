@@ -24,12 +24,9 @@ jobs:
           key: bazel
 
       - name: "Coverage"
-        run: bazel test //... && bazel coverage //... && third-party/lcov/bin/genhtml bazel-testlogs/pkg/proto/proto_test/coverage.dat -o ./target/coverage -t "Proto Diagram Tool"
+        run: bazel test //... && bazel coverage --combined_report=lcov //... && third-party/lcov/bin/genhtml bazel-testlogs/pkg/proto/proto_test/coverage.dat -o ./target/coverage -t "Proto Diagram Tool"
 
       - name: "Coverage Report"
-        uses: zgosalvez/github-actions-report-lcov@v3
+        uses: romeovs/lcov-reporter-action@v0.2.16
         with:
-          coverage-files: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
-          minimum-coverage: 70
-          artifact-name: code-coverage-report
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
