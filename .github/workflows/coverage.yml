@@ -42,8 +42,9 @@ jobs:
         uses: schneegans/dynamic-badges-action@v1.6.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
-          filename: coverage.json
+          filename: proto-diagram-tool-coverage.json
           label: Coverage
+          gistID: e2d1696c1ef0cbc67ef8bcbbfc46313a
           message: ${{ env.COVERAGE }}
           valColorRange: ${{ env.COVERAGE }}
           maxColorRange: 100
