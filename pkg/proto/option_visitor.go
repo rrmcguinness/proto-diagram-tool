@@ -37,7 +37,7 @@ func (ov *OptionVisitor) Visit(_ Scanner, in *Line, _ string) interface{} {
 	if len(fValues) == 4 {
 		return &Option{&NamedValue{
 			Name:    fValues[1],
-			Value:   fValues[3],
+			Value:   strings.ReplaceAll(fValues[3], `"`, ""),
 			Comment: in.Comment[:],
 		}}
 	}

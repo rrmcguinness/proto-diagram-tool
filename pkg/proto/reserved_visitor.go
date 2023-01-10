@@ -24,13 +24,17 @@ import (
 type ReservedVisitor struct {
 }
 
-func (rv ReservedVisitor) CanVisit(line *Line) bool {
+func (rv *ReservedVisitor) CanVisit(line *Line) bool {
 	return strings.HasPrefix(line.Syntax, PrefixReserved) && line.Token == Semicolon
 }
 
-func (rv ReservedVisitor) Visit(scanner Scanner, in *Line, namespace string) interface{} {
+func (rv *ReservedVisitor) Visit(_ Scanner, in *Line, _ string) interface{} {
 	Log.Debug("Visiting Reserved")
 	split := in.SplitSyntax()
+	if len(split) == 2 {
+		s, _ := strconv.ParseInt(split[1], 10, 64)
+		return NewReserved(int32(s), int32(s))
+	}
 	if len(split) == 4 {
 		s, _ := strconv.ParseInt(split[1], 10, 64)
 		e, _ := strconv.ParseInt(split[3], 10, 64)

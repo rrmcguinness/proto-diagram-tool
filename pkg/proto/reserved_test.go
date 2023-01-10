@@ -17,28 +17,32 @@
 package proto
 
 import (
-	"strings"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-var isDebug bool
-
-type PackageVisitor struct {
-}
-
-func (pv *PackageVisitor) CanVisit(in *Line) bool {
-	return strings.HasPrefix(in.Syntax, "package") && in.Token == Semicolon
-}
-
-func (pv *PackageVisitor) Visit(_ Scanner, in *Line, _ string) interface{} {
-	fValues := in.SplitSyntax()
-	return &Package{
-		Path:     "",
-		Name:     fValues[1],
-		Comment:  in.Comment,
-		Options:  make([]*Option, 0),
-		Imports:  make([]*Import, 0),
-		Messages: make([]*Message, 0),
-		Enums:    make([]*Enum, 0),
-		Services: make([]*Service, 0),
+func TestNewReserved(t *testing.T) {
+	type args struct {
+		start int32
+		end   int32
+	}
+	tests := []struct {
+		name string
+		args args
+		want *Reserved
+	}{
+		{name: "Reserved", args: args{
+			start: 4,
+			end:   10,
+		}, want: &Reserved{
+			Start: 4,
+			End:   10,
+		}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, NewReserved(tt.args.start, tt.args.end), "NewReserved(%v, %v)", tt.args.start, tt.args.end)
+		})
 	}
 }
