@@ -46,14 +46,14 @@ func EnumToMarkdown(enum *Enum, visualize bool) (body string, diagram string) {
 	enumTable := NewMarkdownTable()
 	enumTable.AddHeader("Name", "Ordinal", "Description")
 	for _, v := range enum.Values {
-		enumTable.Insert(v.Value, strconv.Itoa(v.Ordinal), string(v.Comment))
+		enumTable.Insert(v.Value, strconv.Itoa(v.Ordinal), v.Comment.ToMarkdownText())
 	}
 
 	// Convert to a string
 	if visualize {
 		diagram = "\n" + ToMermaid(enum.Name, enum)
 	}
-	body = fmt.Sprintf("## Enum: %s\n%s\n\n%s\n\n%s\n\n", enum.Name, fmt.Sprintf(fqn, enum.Qualifier), enum.Comment, enumTable.String())
+	body = fmt.Sprintf("## Enum: %s\n%s\n\n%s\n\n%s\n\n", enum.Name, fmt.Sprintf(fqn, enum.Qualifier), enum.Comment.ToMarkdownBlockQuote(), enumTable.String())
 	return body, diagram
 }
 
@@ -73,14 +73,14 @@ func MessageToMarkdown(message *Message, visualize bool) (body string, diagram s
 		} else if a.Repeated {
 			label = "Repeated"
 		}
-		attributeTable.Insert(a.Name, strconv.Itoa(a.Ordinal), strings.Join(a.Kind, Comma), label, string(a.Comment))
+		attributeTable.Insert(a.Name, strconv.Itoa(a.Ordinal), strings.Join(a.Kind, Comma), label, a.Comment.ToMarkdownText())
 	}
 
 	if visualize {
 		diagram = "\n" + ToMermaid(message.Name, message)
 	}
 
-	body = fmt.Sprintf("## Message: %s\n%s\n\n%s\n\n%s\n\n", message.Name, fmt.Sprintf(fqn, message.Qualifier), message.Comment, attributeTable.String())
+	body = fmt.Sprintf("## Message: %s\n%s\n\n%s\n\n%s\n\n", message.Name, fmt.Sprintf(fqn, message.Qualifier), message.Comment.ToMarkdownBlockQuote(), attributeTable.String())
 
 	for _, e := range message.Enums {
 		eBody, eDiagram := EnumToMarkdown(e, visualize)
@@ -108,14 +108,14 @@ func ServiceToMarkdown(s *Service, visualize bool) string {
 	for _, m := range s.Methods {
 		methodTable.Insert(m.Name,
 			FormatServiceParameter(m.InputParameters),
-			FormatServiceParameter(m.ReturnParameters), string(m.Comment))
+			FormatServiceParameter(m.ReturnParameters), m.Comment.ToMarkdownText())
 	}
 	table := methodTable.String()
 	if visualize {
-		table += "\n" + ToMermaid(s.Name, s)
+		table = ToMermaid(s.Name, s) + "\n\n" + table
 	}
 
-	return fmt.Sprintf("## Service: %s\n%s\n\n%s\n\n%s\n\n", s.Name, fmt.Sprintf(fqn, s.Qualifier), s.Comment, table)
+	return fmt.Sprintf("## Service: %s\n%s\n\n%s\n\n%s\n\n", s.Name, fmt.Sprintf(fqn, s.Qualifier), s.Comment.ToMarkdownBlockQuote(), table)
 }
 
 func HandleEnums(enums []*Enum, visualize bool) (body string) {
@@ -140,14 +140,17 @@ func HandleMessages(messages []*Message, visualize bool) (body string) {
 			diagrams += mDiagram
 		}
 	}
-	return body + diagrams
+	if visualize {
+		diagrams += "\n\n"
+	}
+	return diagrams + body
 }
 
 func PackageFormatImports(p *Package) (body string) {
 	importTable := NewMarkdownTable()
 	importTable.AddHeader("Import", "Description")
 	for _, i := range p.Imports {
-		importTable.Insert(i.Path, string(i.Comment))
+		importTable.Insert(i.Path, i.Comment.ToMarkdownText())
 	}
 	body = fmt.Sprintf("## Imports\n\n%s\n", importTable.String())
 	return body
@@ -157,7 +160,7 @@ func PackageFormatOptions(p *Package) (body string) {
 	optionTable := NewMarkdownTable()
 	optionTable.AddHeader("Name", "Value", "Description")
 	for _, o := range p.Options {
-		optionTable.Insert(o.Name, o.Value, string(o.Comment))
+		optionTable.Insert(o.Name, o.Value, o.Comment.ToMarkdownText())
 	}
 	body = fmt.Sprintf("## Options\n\n%s\n", optionTable.String())
 	return body
@@ -178,6 +181,6 @@ func PackageToMarkDown(p *Package, visualize bool) string {
 	}
 	out += HandleEnums(p.Enums, visualize)
 	out += HandleMessages(p.Messages, visualize)
-	out = fmt.Sprintf("# Package: %s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n", p.Name, p.Comment, PackageFormatImports(p), PackageFormatOptions(p), out, footer)
+	out = fmt.Sprintf("# Package: %s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n", p.Name, p.Comment.ToMarkdownBlockQuote(), PackageFormatImports(p), PackageFormatOptions(p), out, footer)
 	return out
 }

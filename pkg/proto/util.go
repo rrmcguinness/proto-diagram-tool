@@ -83,7 +83,7 @@ func ReadFileToArray(file *os.File) []string {
 	for scanner.Scan() {
 		rune := scanner.Text()
 		if !strings.HasPrefix(line, MultiLineCommentInitiator) && (rune == Semicolon || rune == OpenBrace || rune == CloseBrace) {
-			lines = append(lines, cleaner.ReplaceAllString(strings.TrimSpace(line+rune), Space))
+			lines = append(lines, cleaner.ReplaceAllString(line+rune, Space))
 			tokenReached = true
 			line = ""
 		} else if strings.HasPrefix(line, InlineCommentPrefix) && rune == EndL {
@@ -115,7 +115,7 @@ func ReadFileToArray(file *os.File) []string {
 			} else {
 				// Add a space to account for new lines in multiline comment
 				if strings.HasPrefix(line, MultiLineCommentInitiator) {
-					line += Space
+					line += CommentNewLine
 				}
 				tokenReached = false
 			}

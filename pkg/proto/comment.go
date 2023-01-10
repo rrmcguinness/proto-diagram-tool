@@ -16,13 +16,41 @@
 
 package proto
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // Comment is a string with additional methods
 type Comment string
 
 func (c Comment) ToMermaid() string {
-	return "%% " + string(c)
+	comments := strings.Split(string(c), CommentNewLine)
+	out := ""
+	for _, c := range comments {
+		out += fmt.Sprintf("%%%% %s\n", c)
+
+	}
+	return out
+}
+
+func (c Comment) ToMarkdownText() string {
+	comments := strings.Split(string(c), CommentNewLine)
+	out := ""
+	for _, c := range comments {
+		out += fmt.Sprintf("%s ", c)
+	}
+	return out
+}
+
+func (c Comment) ToMarkdownBlockQuote() string {
+	comments := strings.Split(string(c), CommentNewLine)
+	out := "<div class=\"comment\">"
+	for _, c := range comments {
+		out += fmt.Sprintf("<span>%s</span><br/>", c)
+	}
+	out += "</div>"
+	return out
 }
 
 // Append adds a comment to the end of an existing comment.

@@ -45,6 +45,7 @@ const (
 	DoubleQuote                = `"`
 	SingleQuote                = `'`
 	EndL                       = "\n"
+	CommentNewLine             = `:~:`
 )
 
 // From gist: https://gist.github.com/ik5/d8ecde700972d4378d87

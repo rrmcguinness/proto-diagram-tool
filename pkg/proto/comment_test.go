@@ -77,7 +77,7 @@ func TestComment_ToMermaid(t *testing.T) {
 		c    Comment
 		want string
 	}{
-		{name: "To Mermaid", c: Comment("Test"), want: "%% Test"},
+		{name: "To Mermaid", c: Comment("Test"), want: "%% Test\n"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

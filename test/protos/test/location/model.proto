@@ -76,3 +76,12 @@ message PhysicalLocation {
   // Names for the location
   repeated string names = 12 [json_name = 'names'];
 }
+
+message PhoneNumber {
+  string country_code = 1;
+  string area_code = 2;
+  string prefix = 3;
+  string suffix = 4;
+  string extension = 5;
+  reserved 6 to 10;
+}

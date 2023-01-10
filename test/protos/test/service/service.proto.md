@@ -1,6 +1,6 @@
 # Package: test.service
 
-Copyright 2022 Google LLC Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+<div class="comment"><span></span><br/><span>Copyright 2022 Google LLC</span><br/><span>Licensed under the Apache License, Version 2.0 (the "License");</span><br/><span>you may not use this file except in compliance with the License.</span><br/><span>You may obtain a copy of the License at</span><br/><span> http://www.apache.org/licenses/LICENSE-2.0</span><br/><span>Unless required by applicable law or agreed to in writing, software</span><br/><span>distributed under the License is distributed on an "AS IS" BASIS,</span><br/><span>WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br/><span>See the License for the specific language governing permissions and</span><br/><span>limitations under the License.</span><br/><span></span><br/></div>
 
 ## Imports
 
@@ -14,22 +14,18 @@ Copyright 2022 Google LLC Licensed under the Apache License, Version 2.0 (the "L
 
 ## Options
 
-| Name                | Value                                         | Description     |
-|---------------------|-----------------------------------------------|-----------------|
-| go_package          | "github.com/rrmcguinness/proto/test/location" | Go Lang Options |
-| java_package        | "com.github.rrmcguinness.proto.test.location" | Java Options    |
-| java_multiple_files | true                                          |                 |
+| Name                | Value                                       | Description      |
+|---------------------|---------------------------------------------|------------------|
+| go_package          | github.com/rrmcguinness/proto/test/location | Go Lang Options  |
+| java_package        | com.github.rrmcguinness.proto.test.location | Java Options     |
+| java_multiple_files | true                                        |                  |
 
 
 
 ## Service: LocationService
 <div style="font-size: 12px; margin-top: -10px;" class="fqn">FQN: test.service</div>
 
-The LocationService is responsible for CRUD operations of Physical Locations.
-
-| Method | Parameter (In) | Parameter (Out)            | Description                               |
-|--------|----------------|----------------------------|-------------------------------------------|
-| List   | Empty          | Stream\<PhysicalLocation\> | List returns a list of physical locations |
+<div class="comment"><span></span><br/><span>The LocationService is responsible for CRUD operations of Physical Locations.</span><br/><span></span><br/></div>
 
 ### LocationService Diagram
 
@@ -44,6 +40,13 @@ LocationService --> `google.protobuf.Empty`
 LocationService --o `test.location.PhysicalLocation`
 
 ```
+
+| Method | Parameter (In) | Parameter (Out)            | Description                                |
+|--------|----------------|----------------------------|--------------------------------------------|
+| List   | Empty          | Stream\<PhysicalLocation\> | List returns a list of physical locations  |
+
+
+
 
 
 
