@@ -25,15 +25,15 @@ var RpcLinePattern = `rpc\s+(.*?)\((.*?)\)\s+returns\s+\((.*?)\)(.*)`
 
 type RpcVisitor struct {
 	Visitors       []Visitor
-	RpcLineMarcher *regexp.Regexp
+	RpcLineMatcher *regexp.Regexp
 }
 
 func NewRpcVisitor() *RpcVisitor {
-	return &RpcVisitor{RpcLineMarcher: regexp.MustCompile(RpcLinePattern)}
+	return &RpcVisitor{RpcLineMatcher: regexp.MustCompile(RpcLinePattern)}
 }
 
 func (rv *RpcVisitor) CanVisit(line *Line) bool {
-	return rv.RpcLineMarcher.MatchString(line.Syntax)
+	return rv.RpcLineMatcher.MatchString(line.Syntax)
 }
 
 func ParseInArgs(values []string, rpc *Rpc) {
@@ -61,7 +61,7 @@ func ParseReturnArgs(values []string, rpc *Rpc) {
 func (rv *RpcVisitor) Visit(scanner Scanner, in *Line, namespace string) interface{} {
 	Log.Debugf("Visiting RPC: %v\n", in)
 
-	values := rv.RpcLineMarcher.FindStringSubmatch(in.Syntax)
+	values := rv.RpcLineMatcher.FindStringSubmatch(in.Syntax)
 	out := NewRpc(namespace, values[1], in.Comment)
 	ParseInArgs(values, out)
 	ParseReturnArgs(values, out)
