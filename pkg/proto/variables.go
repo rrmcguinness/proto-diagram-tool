@@ -33,7 +33,7 @@ func SetDebug(debug bool) {
 
 var RegisteredVisitors []Visitor
 
-// Initialize the visitors
+// Initialize the Visitors
 func init() {
 	// Handle Comments
 	RegisteredVisitors = append(RegisteredVisitors,

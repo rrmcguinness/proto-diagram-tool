@@ -1,8 +1,26 @@
-package proto
+/*
+ * Copyright 2022 Google, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package core
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestComputeFormat(t *testing.T) {
@@ -19,7 +37,7 @@ func TestComputeFormat(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, ComputeFormat(tt.args.length, tt.args.value), "ComputeFormat(%v, %v)", tt.args.length, tt.args.value)
+			assert.Equalf(t, tt.want, proto.ComputeFormat(tt.args.length, tt.args.value), "ComputeFormat(%v, %v)", tt.args.length, tt.args.value)
 		})
 	}
 }
@@ -37,7 +55,7 @@ func TestDashLine(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, DashLine(tt.args.length), "DashLine(%v)", tt.args.length)
+			assert.Equalf(t, tt.want, proto.DashLine(tt.args.length), "DashLine(%v)", tt.args.length)
 		})
 	}
 }
@@ -66,13 +84,13 @@ func TestMarkdownTable_AddHeader(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mt := &MarkdownTable{
-				header:        tt.fields.header,
-				columnLengths: tt.fields.columnLengths,
-				data:          tt.fields.data,
+			mt := &proto.MarkdownTable{
+				Header:        tt.fields.header,
+				ColumnLengths: tt.fields.columnLengths,
+				Data:          tt.fields.data,
 			}
 			mt.AddHeader(tt.args.names...)
-			assert.Equal(t, 1, len(mt.header))
+			assert.Equal(t, 1, len(mt.Header))
 		})
 	}
 }
@@ -104,13 +122,13 @@ func TestMarkdownTable_EvaluateWidth(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mt := &MarkdownTable{
-				header:        tt.fields.header,
-				columnLengths: tt.fields.columnLengths,
-				data:          tt.fields.data,
+			mt := &proto.MarkdownTable{
+				Header:        tt.fields.header,
+				ColumnLengths: tt.fields.columnLengths,
+				Data:          tt.fields.data,
 			}
 			mt.EvaluateWidth(tt.args.i, tt.args.d)
-			assert.Equal(t, 6, mt.columnLengths[0])
+			assert.Equal(t, 6, mt.ColumnLengths[0])
 		})
 	}
 }
@@ -138,13 +156,13 @@ func TestMarkdownTable_Insert(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mt := &MarkdownTable{
-				header:        tt.fields.header,
-				columnLengths: tt.fields.columnLengths,
-				data:          tt.fields.data,
+			mt := &proto.MarkdownTable{
+				Header:        tt.fields.header,
+				ColumnLengths: tt.fields.columnLengths,
+				Data:          tt.fields.data,
 			}
 			mt.Insert(tt.args.data...)
-			assert.Equal(t, 3, len(mt.data[0]))
+			assert.Equal(t, 3, len(mt.Data[0]))
 		})
 	}
 }
@@ -174,10 +192,10 @@ func TestMarkdownTable_String(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mt := &MarkdownTable{
-				header:        tt.fields.header,
-				columnLengths: tt.fields.columnLengths,
-				data:          tt.fields.data,
+			mt := &proto.MarkdownTable{
+				Header:        tt.fields.header,
+				ColumnLengths: tt.fields.columnLengths,
+				Data:          tt.fields.data,
 			}
 			assert.Equalf(t, tt.want, mt.String(), "String()")
 		})
@@ -187,17 +205,17 @@ func TestMarkdownTable_String(t *testing.T) {
 func TestNewMarkdownTable(t *testing.T) {
 	tests := []struct {
 		name string
-		want *MarkdownTable
+		want *proto.MarkdownTable
 	}{
-		{name: "New Table", want: &MarkdownTable{
-			header:        []string{},
-			columnLengths: []int{},
-			data:          [][]string{},
+		{name: "New Table", want: &proto.MarkdownTable{
+			Header:        []string{},
+			ColumnLengths: []int{},
+			Data:          [][]string{},
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, NewMarkdownTable(), "NewMarkdownTable()")
+			assert.Equalf(t, tt.want, proto.NewMarkdownTable(), "NewMarkdownTable()")
 		})
 	}
 }

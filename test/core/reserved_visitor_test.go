@@ -14,41 +14,42 @@
  * limitations under the License.
  */
 
-package proto
+package core
 
 import (
 	"testing"
 
+	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestReservedVisitor_CanVisit(t *testing.T) {
 	type args struct {
-		line *Line
+		line *proto.Line
 	}
 	tests := []struct {
 		name string
 		args args
 		want bool
 	}{
-		{name: "Can Visit", args: args{line: &Line{
+		{name: "Can Visit", args: args{line: &proto.Line{
 			Syntax:  "reserved 10",
 			Token:   ";",
 			Comment: "Reserved 10",
 		}}, want: true},
-		{name: "Can Visit", args: args{line: &Line{
+		{name: "Can Visit", args: args{line: &proto.Line{
 			Syntax:  "reserved 10 to 20",
 			Token:   ";",
 			Comment: "Reserved 10",
 		}}, want: true},
-		{name: "Can't Visit", args: args{line: &Line{
+		{name: "Can't Visit", args: args{line: &proto.Line{
 			Syntax: "Comment",
 			Token:  "//",
 		}}, want: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rv := &ReservedVisitor{}
+			rv := &proto.ReservedVisitor{}
 			assert.Equalf(t, tt.want, rv.CanVisit(tt.args.line), "CanVisit(%v)", tt.args.line)
 		})
 	}
@@ -56,8 +57,8 @@ func TestReservedVisitor_CanVisit(t *testing.T) {
 
 func TestReservedVisitor_Visit(t *testing.T) {
 	type args struct {
-		in0 Scanner
-		in  *Line
+		in0 proto.Scanner
+		in  *proto.Line
 		in2 string
 	}
 	testScanner := NewTestScanner(``)
@@ -68,32 +69,32 @@ func TestReservedVisitor_Visit(t *testing.T) {
 	}{
 		{name: "Is Reserved", args: args{
 			in0: testScanner,
-			in: &Line{
+			in: &proto.Line{
 				Syntax:  "reserved 10",
 				Token:   ";",
 				Comment: "Reserved 10",
 			},
 			in2: "test.Message",
-		}, want: &Reserved{
+		}, want: &proto.Reserved{
 			Start: 10,
 			End:   10,
 		}},
 		{name: "Is Reserved", args: args{
 			in0: testScanner,
-			in: &Line{
+			in: &proto.Line{
 				Syntax:  "reserved 10 to 20",
 				Token:   ";",
 				Comment: "Reserved 10 to 20",
 			},
 			in2: "test.Message",
-		}, want: &Reserved{
+		}, want: &proto.Reserved{
 			Start: 10,
 			End:   20,
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rv := &ReservedVisitor{}
+			rv := &proto.ReservedVisitor{}
 			assert.Equalf(t, tt.want, rv.Visit(tt.args.in0, tt.args.in, tt.args.in2), "Visit(%v, %v, %v)", tt.args.in0, tt.args.in, tt.args.in2)
 		})
 	}

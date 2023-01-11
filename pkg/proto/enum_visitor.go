@@ -23,8 +23,8 @@ import (
 // NewEnumVisitor creates an EnumVisitor
 func NewEnumVisitor() *EnumVisitor {
 	Log.Debug("Initializing EnumVisitor")
-	out := &EnumVisitor{visitors: make([]Visitor, 0)}
-	out.visitors = append(out.visitors,
+	out := &EnumVisitor{Visitors: make([]Visitor, 0)}
+	out.Visitors = append(out.Visitors,
 		&CommentVisitor{},
 		&EnumValueVisitor{})
 	return out
@@ -32,7 +32,7 @@ func NewEnumVisitor() *EnumVisitor {
 
 // EnumVisitor is responsible for evaluation and marshalling of an Enum entity.
 type EnumVisitor struct {
-	visitors []Visitor
+	Visitors []Visitor
 }
 
 // CanVisit determines if the current line is an enumeration.
@@ -42,7 +42,7 @@ func (ev *EnumVisitor) CanVisit(in *Line) bool {
 
 // Visit marshals a line and subsequent lines of the enumeration until the terminator is found.
 func (ev *EnumVisitor) Visit(scanner Scanner, in *Line, namespace string) interface{} {
-	Log.Debugf("Visiting Enum: %d registered visitors\n", len(ev.visitors))
+	Log.Debugf("Visiting Enum: %d registered Visitors\n", len(ev.Visitors))
 	fValues := in.SplitSyntax()
 	out := NewEnum(Join(Period, namespace, fValues[1]), fValues[1], in.Comment)
 
@@ -53,7 +53,7 @@ func (ev *EnumVisitor) Visit(scanner Scanner, in *Line, namespace string) interf
 		if strings.HasSuffix(n.Token, CloseBrace) {
 			break
 		}
-		for _, visitor := range ev.visitors {
+		for _, visitor := range ev.Visitors {
 			if visitor.CanVisit(n) {
 				rt := visitor.Visit(
 					scanner,

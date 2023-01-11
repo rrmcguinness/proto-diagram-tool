@@ -14,47 +14,32 @@
  * limitations under the License.
  */
 
-package proto
+package core
 
 import (
 	"testing"
 
+	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewAnnotation(t *testing.T) {
+func TestNewImport(t *testing.T) {
 	type args struct {
-		name  string
-		value any
+		path string
 	}
 	tests := []struct {
 		name string
 		args args
-		want *Annotation
+		want *proto.Import
 	}{
-		{name: "test 001", args: args{name: "test", value: "test"}, want: &Annotation{"test", "test"}},
+		{name: "Create", args: args{path: "com.google.test"}, want: &proto.Import{
+			Path:    "com.google.test",
+			Comment: "",
+		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, NewAnnotation(tt.args.name, tt.args.value), "NewAnnotation(%v, %v)", tt.args.name, tt.args.value)
-		})
-	}
-}
-
-func TestParseAnnotations(t *testing.T) {
-	type args struct {
-		in string
-	}
-	tests := []struct {
-		name string
-		args args
-		want []*Annotation
-	}{
-		{name: "Test 001", args: args{in: "int32 longitude_degrees = 3 [json_name = 'lng_d'];"}, want: []*Annotation{&Annotation{Name: "json_name", Value: "lng_d"}}},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, ParseAnnotations(tt.args.in), "ParseAnnotations(%v)", tt.args.in)
+			assert.Equalf(t, tt.want, proto.NewImport(tt.args.path), "NewImport(%v)", tt.args.path)
 		})
 	}
 }

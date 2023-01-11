@@ -3,6 +3,7 @@ module github.com/rrmcguinness/proto-diagram-tool
 go 1.19
 
 replace github.com/rrmcguinness/proto-diagram-tool/pkg/proto => ./pkg/proto
+replace github.com/rrmcguinness/proto-diagram-tool/test/core => ./test/core
 
 require github.com/stretchr/testify v1.8.1
 

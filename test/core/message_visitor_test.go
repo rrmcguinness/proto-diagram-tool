@@ -1,32 +1,50 @@
-package proto
+/*
+ * Copyright 2022 Google, LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package core
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMessageVisitor_CanVisit(t *testing.T) {
 	type args struct {
-		in *Line
+		in *proto.Line
 	}
 	tests := []struct {
 		name string
 		args args
 		want bool
 	}{
-		{name: "Can Visit", args: args{in: &Line{
+		{name: "Can Visit", args: args{in: &proto.Line{
 			Syntax:  "message Test",
 			Token:   "{",
 			Comment: "Test Message",
 		}}, want: true},
-		{name: "Can not Visit", args: args{in: &Line{
+		{name: "Can not Visit", args: args{in: &proto.Line{
 			Token:   "//",
 			Comment: "Test Message",
 		}}, want: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mv := &MessageVisitor{}
+			mv := &proto.MessageVisitor{}
 			assert.Equalf(t, tt.want, mv.CanVisit(tt.args.in), "CanVisit(%v)", tt.args.in)
 		})
 	}
@@ -34,8 +52,8 @@ func TestMessageVisitor_CanVisit(t *testing.T) {
 
 func TestMessageVisitor_Visit(t *testing.T) {
 	type args struct {
-		scanner   Scanner
-		in        *Line
+		scanner   proto.Scanner
+		in        *proto.Line
 		namespace string
 	}
 	testFile := `
@@ -55,17 +73,17 @@ func TestMessageVisitor_Visit(t *testing.T) {
 	}{
 		{name: "Message Scanner", args: args{
 			scanner:   scanner,
-			in:        NewLine("message Test { // Test Message"),
+			in:        proto.NewLine("message Test { // Test Message"),
 			namespace: "test",
-		}, want: &Message{
-			Qualified: &Qualified{
+		}, want: &proto.Message{
+			Qualified: &proto.Qualified{
 				Qualifier: "test.Test",
 				Name:      "Test",
 				Comment:   "Test Message",
 			},
-			Attributes: []*Attribute{
+			Attributes: []*proto.Attribute{
 				{
-					Qualified: &Qualified{
+					Qualified: &proto.Qualified{
 						Qualifier: "test.Test",
 						Name:      "name",
 						Comment:   "Name",
@@ -74,10 +92,10 @@ func TestMessageVisitor_Visit(t *testing.T) {
 					Map:         false,
 					Kind:        []string{"string"},
 					Ordinal:     1,
-					Annotations: make([]*Annotation, 0),
+					Annotations: make([]*proto.Annotation, 0),
 				},
 				{
-					Qualified: &Qualified{
+					Qualified: &proto.Qualified{
 						Qualifier: "test.Test",
 						Name:      "type",
 						Comment:   "Type",
@@ -86,17 +104,17 @@ func TestMessageVisitor_Visit(t *testing.T) {
 					Map:         false,
 					Kind:        []string{"TestEnum"},
 					Ordinal:     2,
-					Annotations: make([]*Annotation, 0),
+					Annotations: make([]*proto.Annotation, 0),
 				},
 			},
-			Messages: make([]*Message, 0),
-			Enums: []*Enum{
+			Messages: make([]*proto.Message, 0),
+			Enums: []*proto.Enum{
 				{
-					Qualified: &Qualified{
+					Qualified: &proto.Qualified{
 						Qualifier: "test.Test.TestEnum",
 						Name:      "TestEnum",
 					},
-					Values: []*EnumValue{
+					Values: []*proto.EnumValue{
 						{
 							Namespace: "test.Test.TestEnum",
 							Ordinal:   0,
@@ -110,12 +128,12 @@ func TestMessageVisitor_Visit(t *testing.T) {
 					},
 				},
 			},
-			Reserved: make([]*Reserved, 0),
+			Reserved: make([]*proto.Reserved, 0),
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mv := &MessageVisitor{}
+			mv := &proto.MessageVisitor{}
 			assert.Equalf(t, tt.want, mv.Visit(tt.args.scanner, tt.args.in, tt.args.namespace), "Visit(%v, %v, %v)", tt.args.scanner, tt.args.in, tt.args.namespace)
 		})
 	}

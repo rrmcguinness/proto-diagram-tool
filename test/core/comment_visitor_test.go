@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package proto
+package core
 
 import (
 	"testing"
 
+	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
-var commentVisitor = &CommentVisitor{}
+var commentVisitor = &proto.CommentVisitor{}
 
 func TestCommentVisitor_CanVisit(t *testing.T) {
-	l := &Line{Comment: "Test Comment", Token: InlineCommentPrefix}
+	l := &proto.Line{Comment: "Test Comment", Token: proto.InlineCommentPrefix}
 	assert.True(t, commentVisitor.CanVisit(l))
 
-	l = &Line{Comment: "Test Comment", Token: "/*"}
+	l = &proto.Line{Comment: "Test Comment", Token: "/*"}
 	assert.True(t, commentVisitor.CanVisit(l))
 }
 

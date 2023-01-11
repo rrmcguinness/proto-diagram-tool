@@ -25,21 +25,21 @@ const (
 )
 
 type MarkdownTable struct {
-	header        []string
-	columnLengths []int
-	data          [][]string
+	Header        []string
+	ColumnLengths []int
+	Data          [][]string
 }
 
 func NewMarkdownTable() *MarkdownTable {
-	return &MarkdownTable{header: make([]string, 0), columnLengths: make([]int, 0), data: make([][]string, 0)}
+	return &MarkdownTable{Header: make([]string, 0), ColumnLengths: make([]int, 0), Data: make([][]string, 0)}
 }
 
 func (mt *MarkdownTable) EvaluateWidth(i int, d string) {
 	dLen := len(d) + MarkdownPadding
-	if len(mt.columnLengths) == i {
-		mt.columnLengths = append(mt.columnLengths, dLen)
-	} else if mt.columnLengths[i] < dLen {
-		mt.columnLengths[i] = dLen
+	if len(mt.ColumnLengths) == i {
+		mt.ColumnLengths = append(mt.ColumnLengths, dLen)
+	} else if mt.ColumnLengths[i] < dLen {
+		mt.ColumnLengths[i] = dLen
 	}
 }
 
@@ -48,7 +48,7 @@ func (mt *MarkdownTable) AddHeader(names ...string) {
 		mt.EvaluateWidth(i, d)
 		names[i] = Space + d
 	}
-	mt.header = append(mt.header, names...)
+	mt.Header = append(mt.Header, names...)
 }
 
 func (mt *MarkdownTable) Insert(data ...string) {
@@ -57,7 +57,7 @@ func (mt *MarkdownTable) Insert(data ...string) {
 		// Pad
 		data[i] = Space + d
 	}
-	mt.data = append(mt.data, data)
+	mt.Data = append(mt.Data, data)
 }
 
 func ComputeFormat(length int, value string) string {
@@ -76,20 +76,20 @@ func DashLine(length int) string {
 func (mt *MarkdownTable) String() string {
 	// Write the Header
 	out := Pipe
-	for i, h := range mt.header {
-		out += ComputeFormat(mt.columnLengths[i], h)
+	for i, h := range mt.Header {
+		out += ComputeFormat(mt.ColumnLengths[i], h)
 	}
 	// Write the Header Separator
 	out += EndL + Pipe
-	for i, _ := range mt.header {
-		out += DashLine(mt.columnLengths[i])
+	for i, _ := range mt.Header {
+		out += DashLine(mt.ColumnLengths[i])
 	}
 	out += EndL
-	// Write the data
-	for i := 0; i < len(mt.data); i++ {
+	// Write the Data
+	for i := 0; i < len(mt.Data); i++ {
 		out += Pipe
-		for j := 0; j < len(mt.data[i]); j++ {
-			out += ComputeFormat(mt.columnLengths[j], mt.data[i][j])
+		for j := 0; j < len(mt.Data[i]); j++ {
+			out += ComputeFormat(mt.ColumnLengths[j], mt.Data[i][j])
 		}
 		out += EndL
 	}

@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "proto",
@@ -39,29 +39,4 @@ go_library(
     ],
     importpath = "github.com/rrmcguinness/proto-diagram-tool/pkg/proto",
     visibility = ["//visibility:public"],
-)
-
-go_test(
-    name = "proto_test",
-    srcs = [
-        "annotation_test.go",
-        "attribute_test.go",
-        "attribute_visitor_test.go",
-        "comment_test.go",
-        "comment_visitor_test.go",
-        "enum_test.go",
-        "enum_value_test.go",
-        "enum_visitor_test.go",
-        "import_visitor_test.go",
-        "line_test.go",
-        "markdown_test.go",
-        "message_test.go",
-        "message_visitor_test.go",
-        "model_test.go",
-        "test_scanner.go",
-        "util_test.go",
-    ],
-    data = ["input_test_file.txt"],
-    embed = [":proto"],
-    deps = ["@com_github_stretchr_testify//assert"],
 )

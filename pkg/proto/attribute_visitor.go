@@ -21,25 +21,25 @@ import (
 )
 
 // NewAttributeVisitor - Constructor for the AttributeVisitor
-func NewAttributeVisitor() *attributeVisitor {
+func NewAttributeVisitor() *AttributeVisitor {
 	Log.Debug("Initializing attributeVisitor")
-	return &attributeVisitor{}
+	return &AttributeVisitor{}
 }
 
 // Visitor implementation for attributes
-type attributeVisitor struct {
+type AttributeVisitor struct {
 }
 
 // CanVisit - Determines if the line is an attribute, it doesn't end in a brace,
 // it's a map, repeated, or can effectively be split
-func (av attributeVisitor) CanVisit(in *Line) bool {
+func (av *AttributeVisitor) CanVisit(in *Line) bool {
 	return (!strings.HasSuffix(in.Syntax, OpenBrace) || !strings.HasSuffix(in.Syntax, CloseBrace)) &&
 		strings.HasPrefix(in.Syntax, "repeated") ||
 		strings.HasPrefix(in.Syntax, "map") || len(in.SplitSyntax()) >= 4
 }
 
-// handleRepeated marshals the attribute into a repeated representation, e.g. List.
-func handleRepeated(out *Attribute, split []string) {
+// HandleRepeated marshals the attribute into a repeated representation, e.g. List.
+func HandleRepeated(out *Attribute, split []string) {
 	Log.Debugf("\t processing repeated attribute %s", split[2])
 	// 0 - 4 repeated, type, name, equals, ordinal
 	out.Repeated = true
@@ -49,7 +49,7 @@ func handleRepeated(out *Attribute, split []string) {
 }
 
 // handleMap marshals the attribute into a Map type by using multiple types for key and value.
-func handleMap(out *Attribute, split []string) {
+func HandleMap(out *Attribute, split []string) {
 	Log.Debugf("\t processing map attribute %s", split[2])
 	// map1, map2, name, equals, ordinal
 	mapValue := Join(Space, split[0], split[1])
@@ -61,8 +61,8 @@ func handleMap(out *Attribute, split []string) {
 	out.Ordinal = ParseOrdinal(split[4])
 }
 
-// handleDefaultAttribute marshals a standard attribute type.
-func handleDefaultAttribute(out *Attribute, split []string) {
+// HandleDefaultAttribute marshals a standard attribute type.
+func HandleDefaultAttribute(out *Attribute, split []string) {
 	if len(split) >= 3 {
 		Log.Debugf("\t processing standard attribute %s", split[1])
 		out.Name = split[1]
@@ -72,7 +72,7 @@ func handleDefaultAttribute(out *Attribute, split []string) {
 }
 
 // Visit is used for marshalling an attribute into a struct.
-func (av attributeVisitor) Visit(_ Scanner, in *Line, namespace string) interface{} {
+func (av *AttributeVisitor) Visit(_ Scanner, in *Line, namespace string) interface{} {
 	Log.Debug("Visiting Attribute")
 	out := NewAttribute(namespace, in.Comment)
 	out.Annotations = ParseAnnotations(in.Syntax)
@@ -82,11 +82,11 @@ func (av attributeVisitor) Visit(_ Scanner, in *Line, namespace string) interfac
 		Log.Debug("\t processing reserved attribute")
 		out.Comment += Space + in.Comment
 	} else if strings.HasPrefix(in.Syntax, PrefixRepeated) {
-		handleRepeated(out, split)
+		HandleRepeated(out, split)
 	} else if strings.HasPrefix(in.Syntax, PrefixMap) {
-		handleMap(out, split)
+		HandleMap(out, split)
 	} else {
-		handleDefaultAttribute(out, split)
+		HandleDefaultAttribute(out, split)
 	}
 	return out
 }

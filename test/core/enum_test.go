@@ -14,35 +14,38 @@
  * limitations under the License.
  */
 
-package proto
+package core
 
 import (
 	"testing"
 
+	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewReserved(t *testing.T) {
+func TestNewEnum(t *testing.T) {
 	type args struct {
-		start int32
-		end   int32
+		q       string
+		name    string
+		comment proto.Comment
 	}
 	tests := []struct {
 		name string
 		args args
-		want *Reserved
+		want *proto.Enum
 	}{
-		{name: "Reserved", args: args{
-			start: 4,
-			end:   10,
-		}, want: &Reserved{
-			Start: 4,
-			End:   10,
+		{name: "Test Enum", args: args{q: "test", name: "TEST", comment: "Test"}, want: &proto.Enum{
+			Qualified: &proto.Qualified{
+				Qualifier: "test",
+				Name:      "TEST",
+				Comment:   "Test",
+			},
+			Values: []*proto.EnumValue{},
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, NewReserved(tt.args.start, tt.args.end), "NewReserved(%v, %v)", tt.args.start, tt.args.end)
+			assert.Equalf(t, tt.want, proto.NewEnum(tt.args.q, tt.args.name, tt.args.comment), "NewEnum(%v, %v, %v)", tt.args.q, tt.args.name, tt.args.comment)
 		})
 	}
 }
