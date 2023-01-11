@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestEnumVisitor_CanVisit(t *testing.T) {
 	type fields struct {
-		visitors []proto.Visitor
+		visitors []Visitor
 	}
 	type args struct {
-		in *proto.Line
+		in *Line
 	}
 	tests := []struct {
 		name   string
@@ -37,15 +36,15 @@ func TestEnumVisitor_CanVisit(t *testing.T) {
 		want   bool
 	}{
 		{name: "Test Enum", fields: fields{
-			visitors: []proto.Visitor{},
-		}, args: args{in: &proto.Line{
+			visitors: []Visitor{},
+		}, args: args{in: &Line{
 			Syntax:  "enum AddressType",
 			Token:   "{",
 			Comment: "Enum Comment",
 		}}, want: true},
 		{name: "Test Bad Enum", fields: fields{
-			visitors: []proto.Visitor{},
-		}, args: args{in: &proto.Line{
+			visitors: []Visitor{},
+		}, args: args{in: &Line{
 			Syntax:  "message Address",
 			Token:   "{",
 			Comment: "Not an Enum",
@@ -53,7 +52,7 @@ func TestEnumVisitor_CanVisit(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ev := &proto.EnumVisitor{
+			ev := &EnumVisitor{
 				Visitors: tt.fields.visitors,
 			}
 			assert.Equalf(t, tt.want, ev.CanVisit(tt.args.in), "CanVisit(%v)", tt.args.in)
@@ -63,12 +62,12 @@ func TestEnumVisitor_CanVisit(t *testing.T) {
 
 func TestEnumVisitor_Visit(t *testing.T) {
 	type fields struct {
-		visitors []proto.Visitor
+		visitors []Visitor
 	}
 
 	type args struct {
-		scanner   proto.Scanner
-		in        *proto.Line
+		scanner   Scanner
+		in        *Line
 		namespace string
 	}
 
@@ -82,22 +81,22 @@ func TestEnumVisitor_Visit(t *testing.T) {
 	}{
 		{
 			name:   "Test Visitor",
-			fields: fields{visitors: []proto.Visitor{}},
+			fields: fields{visitors: []Visitor{}},
 			args: args{
 				scanner: scanner,
-				in: &proto.Line{
+				in: &Line{
 					Syntax:  "enum AddressType",
 					Token:   "{",
 					Comment: "Address Type",
 				},
 				namespace: "test",
 			},
-			want: proto.NewEnum("test.AddressType", "AddressType", "Address Type"),
+			want: NewEnum("test.AddressType", "AddressType", "Address Type"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ev := &proto.EnumVisitor{
+			ev := &EnumVisitor{
 				Visitors: tt.fields.visitors,
 			}
 			assert.Equalf(t, tt.want, ev.Visit(tt.args.scanner, tt.args.in, tt.args.namespace), "Visit(%v, %v, %v)", tt.args.scanner, tt.args.in, tt.args.namespace)
@@ -108,13 +107,13 @@ func TestEnumVisitor_Visit(t *testing.T) {
 func TestNewEnumVisitor(t *testing.T) {
 	tests := []struct {
 		name string
-		want *proto.EnumVisitor
+		want *EnumVisitor
 	}{
-		{name: "Test New Visitor", want: proto.NewEnumVisitor()},
+		{name: "Test New Visitor", want: NewEnumVisitor()},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.NewEnumVisitor(), "NewEnumVisitor()")
+			assert.Equalf(t, tt.want, NewEnumVisitor(), "NewEnumVisitor()")
 		})
 	}
 }

@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestComment_AddSpace(t *testing.T) {
 	tests := []struct {
 		name string
-		c    proto.Comment
-		want proto.Comment
+		c    Comment
+		want Comment
 	}{
-		{name: "Add Space", c: proto.Comment("Test"), want: proto.Comment("Test ")},
+		{name: "Add Space", c: Comment("Test"), want: Comment("Test ")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -40,15 +39,15 @@ func TestComment_AddSpace(t *testing.T) {
 
 func TestComment_Append(t *testing.T) {
 	type args struct {
-		other proto.Comment
+		other Comment
 	}
 	tests := []struct {
 		name string
-		c    proto.Comment
+		c    Comment
 		args args
-		want proto.Comment
+		want Comment
 	}{
-		{name: "Append Comment", c: proto.Comment("Test"), args: args{other: proto.Comment(" test")}, want: proto.Comment("Test test")},
+		{name: "Append Comment", c: Comment("Test"), args: args{other: Comment(" test")}, want: Comment("Test test")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -60,10 +59,10 @@ func TestComment_Append(t *testing.T) {
 func TestComment_Clear(t *testing.T) {
 	tests := []struct {
 		name string
-		c    proto.Comment
-		want proto.Comment
+		c    Comment
+		want Comment
 	}{
-		{name: "Clear", c: proto.Comment("Test"), want: proto.Comment("")},
+		{name: "Clear", c: Comment("Test"), want: Comment("")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -75,10 +74,10 @@ func TestComment_Clear(t *testing.T) {
 func TestComment_ToMermaid(t *testing.T) {
 	tests := []struct {
 		name string
-		c    proto.Comment
+		c    Comment
 		want string
 	}{
-		{name: "To Mermaid", c: proto.Comment("Test"), want: "%% Test\n"},
+		{name: "To Mermaid", c: Comment("Test"), want: "%% Test\n"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -90,10 +89,10 @@ func TestComment_ToMermaid(t *testing.T) {
 func TestComment_TrimSpace(t *testing.T) {
 	tests := []struct {
 		name string
-		c    proto.Comment
-		want proto.Comment
+		c    Comment
+		want Comment
 	}{
-		{name: "Trim Space", c: proto.Comment(" Test "), want: proto.Comment("Test")},
+		{name: "Trim Space", c: Comment(" Test "), want: Comment("Test")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

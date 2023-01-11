@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"bufio"
 	"strings"
-
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 )
 
 type TestScanner struct {
@@ -51,8 +49,8 @@ func (ts *TestScanner) Bytes() []byte {
 	return ts.Bytes()
 }
 
-func (ts *TestScanner) ReadLine() *proto.Line {
-	return proto.NewLine(ts.internalScanner.Text())
+func (ts *TestScanner) ReadLine() *Line {
+	return NewLine(ts.internalScanner.Text())
 }
 
 func NewTestScanner(in string) *TestScanner {

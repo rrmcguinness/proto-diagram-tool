@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"os"
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -39,7 +38,7 @@ func TestFormatLine(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.FormatLine(tt.args.in), "FormatLine(%v)", tt.args.in)
+			assert.Equalf(t, tt.want, FormatLine(tt.args.in), "FormatLine(%v)", tt.args.in)
 		})
 	}
 }
@@ -60,7 +59,7 @@ func TestJoin(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.Join(tt.args.joinCharacter, tt.args.values...), "Join(%v, %v)", tt.args.joinCharacter, tt.args.values)
+			assert.Equalf(t, tt.want, Join(tt.args.joinCharacter, tt.args.values...), "Join(%v, %v)", tt.args.joinCharacter, tt.args.values)
 		})
 	}
 }
@@ -78,7 +77,7 @@ func TestNormalizeName(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.NormalizeName(tt.args.in), "NormalizeName(%v)", tt.args.in)
+			assert.Equalf(t, tt.want, NormalizeName(tt.args.in), "NormalizeName(%v)", tt.args.in)
 		})
 	}
 }
@@ -97,7 +96,7 @@ func TestParseOrdinal(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.ParseOrdinal(tt.args.in), "ParseOrdinal(%v)", tt.args.in)
+			assert.Equalf(t, tt.want, ParseOrdinal(tt.args.in), "ParseOrdinal(%v)", tt.args.in)
 		})
 	}
 }
@@ -122,7 +121,7 @@ func TestReadFileToArray(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.ReadFileToArray(tt.args.file), "ReadFileToArray(%v)", tt.args.file)
+			assert.Equalf(t, tt.want, ReadFileToArray(tt.args.file), "ReadFileToArray(%v)", tt.args.file)
 		})
 	}
 }
@@ -140,7 +139,7 @@ func TestRemoveDoubleQuotes(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.RemoveDoubleQuotes(tt.args.in), "RemoveDoubleQuotes(%v)", tt.args.in)
+			assert.Equalf(t, tt.want, RemoveDoubleQuotes(tt.args.in), "RemoveDoubleQuotes(%v)", tt.args.in)
 		})
 	}
 }
@@ -158,7 +157,7 @@ func TestRemoveNameQualification(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.RemoveNameQualification(tt.args.in), "RemoveNameQualification(%v)", tt.args.in)
+			assert.Equalf(t, tt.want, RemoveNameQualification(tt.args.in), "RemoveNameQualification(%v)", tt.args.in)
 		})
 	}
 }
@@ -176,7 +175,7 @@ func TestRemoveSemicolon(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.RemoveSemicolon(tt.args.in), "RemoveSemicolon(%v)", tt.args.in)
+			assert.Equalf(t, tt.want, RemoveSemicolon(tt.args.in), "RemoveSemicolon(%v)", tt.args.in)
 		})
 	}
 }

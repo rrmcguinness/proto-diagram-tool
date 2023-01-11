@@ -14,38 +14,47 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewEnum(t *testing.T) {
+func TestNewAnnotation(t *testing.T) {
 	type args struct {
-		q       string
-		name    string
-		comment proto.Comment
+		name  string
+		value any
 	}
 	tests := []struct {
 		name string
 		args args
-		want *proto.Enum
+		want *Annotation
 	}{
-		{name: "Test Enum", args: args{q: "test", name: "TEST", comment: "Test"}, want: &proto.Enum{
-			Qualified: &proto.Qualified{
-				Qualifier: "test",
-				Name:      "TEST",
-				Comment:   "Test",
-			},
-			Values: []*proto.EnumValue{},
-		}},
+		{name: "test 001", args: args{name: "test", value: "test"}, want: &Annotation{"test", "test"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.NewEnum(tt.args.q, tt.args.name, tt.args.comment), "NewEnum(%v, %v, %v)", tt.args.q, tt.args.name, tt.args.comment)
+			assert.Equalf(t, tt.want, NewAnnotation(tt.args.name, tt.args.value), "NewAnnotation(%v, %v)", tt.args.name, tt.args.value)
+		})
+	}
+}
+
+func TestParseAnnotations(t *testing.T) {
+	type args struct {
+		in string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []*Annotation
+	}{
+		{name: "Test 001", args: args{in: "int32 longitude_degrees = 3 [json_name = 'lng_d'];"}, want: []*Annotation{{Name: "json_name", Value: "lng_d"}}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, ParseAnnotations(tt.args.in), "ParseAnnotations(%v)", tt.args.in)
 		})
 	}
 }

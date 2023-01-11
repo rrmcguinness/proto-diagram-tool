@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestEnumValueVisitor_CanVisit(t *testing.T) {
 	type args struct {
-		in *proto.Line
+		in *Line
 	}
 	tests := []struct {
 		name string
 		args args
 		want bool
 	}{
-		{name: "Test Enum Value", args: args{in: &proto.Line{
+		{name: "Test Enum Value", args: args{in: &Line{
 			Syntax:  "RESIDENTIAL = 0",
 			Token:   ";",
 			Comment: "A residential address",
 		}}, want: true},
-		{name: "Test Not Enum Value", args: args{in: &proto.Line{
+		{name: "Test Not Enum Value", args: args{in: &Line{
 			Syntax:  "message Address",
 			Token:   "{",
 			Comment: "Not an Enum",
@@ -45,7 +44,7 @@ func TestEnumValueVisitor_CanVisit(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			evv := proto.EnumValueVisitor{}
+			evv := EnumValueVisitor{}
 			assert.Equalf(t, tt.want, evv.CanVisit(tt.args.in), "CanVisit(%v)", tt.args.in)
 		})
 	}
@@ -53,8 +52,8 @@ func TestEnumValueVisitor_CanVisit(t *testing.T) {
 
 func TestEnumValueVisitor_Visit(t *testing.T) {
 	type args struct {
-		in0       proto.Scanner
-		in        *proto.Line
+		in0       Scanner
+		in        *Line
 		namespace string
 	}
 	tests := []struct {
@@ -62,15 +61,15 @@ func TestEnumValueVisitor_Visit(t *testing.T) {
 		args args
 		want interface{}
 	}{
-		{name: "Test Visitor", args: args{in0: nil, in: &proto.Line{
+		{name: "Test Visitor", args: args{in0: nil, in: &Line{
 			Syntax:  "RESIDENTIAL = 0",
 			Token:   ";",
 			Comment: "A residential address",
-		}, namespace: "test"}, want: proto.NewEnumValue("test", "0", "RESIDENTIAL", "A residential address")},
+		}, namespace: "test"}, want: NewEnumValue("test", "0", "RESIDENTIAL", "A residential address")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			evv := proto.EnumValueVisitor{}
+			evv := EnumValueVisitor{}
 			assert.Equalf(t, tt.want, evv.Visit(tt.args.in0, tt.args.in, tt.args.namespace), "Visit(%v, %v, %v)", tt.args.in0, tt.args.in, tt.args.namespace)
 		})
 	}

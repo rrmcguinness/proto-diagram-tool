@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,7 +26,7 @@ func TestLine_SplitSyntax(t *testing.T) {
 	type fields struct {
 		Syntax  string
 		Token   string
-		Comment proto.Comment
+		Comment Comment
 	}
 	tests := []struct {
 		name   string
@@ -42,7 +41,7 @@ func TestLine_SplitSyntax(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			l := &proto.Line{
+			l := &Line{
 				Syntax:  tt.fields.Syntax,
 				Token:   tt.fields.Token,
 				Comment: tt.fields.Comment,
@@ -59,17 +58,17 @@ func TestNewLine(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want *proto.Line
+		want *Line
 	}{
-		{name: "Test Comment", args: args{in: "// Comment"}, want: &proto.Line{Token: "//", Comment: "Comment"}},
-		{name: "Test Multiline Comment", args: args{in: "/* Comment */"}, want: &proto.Line{Token: "/*", Comment: "Comment"}},
-		{name: "Test Open Brace", args: args{in: "message AddressType { // Comment"}, want: &proto.Line{Token: "{", Syntax: "message AddressType", Comment: "Comment"}},
-		{name: "Test Semicolon", args: args{in: "string name = 1; // Comment"}, want: &proto.Line{Token: ";", Syntax: "string name = 1", Comment: "Comment"}},
-		{name: "Test Close Brace", args: args{in: "} // Comment"}, want: &proto.Line{Token: "}", Syntax: "", Comment: "Comment"}},
+		{name: "Test Comment", args: args{in: "// Comment"}, want: &Line{Token: "//", Comment: "Comment"}},
+		{name: "Test Multiline Comment", args: args{in: "/* Comment */"}, want: &Line{Token: "/*", Comment: "Comment"}},
+		{name: "Test Open Brace", args: args{in: "message AddressType { // Comment"}, want: &Line{Token: "{", Syntax: "message AddressType", Comment: "Comment"}},
+		{name: "Test Semicolon", args: args{in: "string name = 1; // Comment"}, want: &Line{Token: ";", Syntax: "string name = 1", Comment: "Comment"}},
+		{name: "Test Close Brace", args: args{in: "} // Comment"}, want: &Line{Token: "}", Syntax: "", Comment: "Comment"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.NewLine(tt.args.in), "NewLine(%v)", tt.args.in)
+			assert.Equalf(t, tt.want, NewLine(tt.args.in), "NewLine(%v)", tt.args.in)
 		})
 	}
 }

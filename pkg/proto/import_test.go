@@ -14,25 +14,31 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
-var commentVisitor = &proto.CommentVisitor{}
-
-func TestCommentVisitor_CanVisit(t *testing.T) {
-	l := &proto.Line{Comment: "Test Comment", Token: proto.InlineCommentPrefix}
-	assert.True(t, commentVisitor.CanVisit(l))
-
-	l = &proto.Line{Comment: "Test Comment", Token: "/*"}
-	assert.True(t, commentVisitor.CanVisit(l))
-}
-
-func TestCommentVisitor_Visit(t *testing.T) {
-
+func TestNewImport(t *testing.T) {
+	type args struct {
+		path string
+	}
+	tests := []struct {
+		name string
+		args args
+		want *Import
+	}{
+		{name: "Create", args: args{path: "com.google.test"}, want: &Import{
+			Path:    "com.google.test",
+			Comment: "",
+		}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, NewImport(tt.args.path), "NewImport(%v)", tt.args.path)
+		})
+	}
 }

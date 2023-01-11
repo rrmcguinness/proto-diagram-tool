@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAttribute_IsValid(t *testing.T) {
 	type fields struct {
-		Qualified   *proto.Qualified
+		Qualified   *Qualified
 		Repeated    bool
 		Map         bool
 		Kind        []string
 		Ordinal     int
-		Annotations []*proto.Annotation
+		Annotations []*Annotation
 	}
 	tests := []struct {
 		name   string
 		fields fields
 		want   bool
 	}{
-		{name: "Test 001", fields: fields{Qualified: &proto.Qualified{
+		{name: "Test 001", fields: fields{Qualified: &Qualified{
 			Qualifier: "test.qualifier",
 			Name:      "Test",
 			Comment:   "This is a test",
@@ -45,7 +44,7 @@ func TestAttribute_IsValid(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &proto.Attribute{
+			a := &Attribute{
 				Qualified:   tt.fields.Qualified,
 				Repeated:    tt.fields.Repeated,
 				Map:         tt.fields.Map,
@@ -60,19 +59,19 @@ func TestAttribute_IsValid(t *testing.T) {
 
 func TestAttribute_ToMermaid(t *testing.T) {
 	type fields struct {
-		Qualified   *proto.Qualified
+		Qualified   *Qualified
 		Repeated    bool
 		Map         bool
 		Kind        []string
 		Ordinal     int
-		Annotations []*proto.Annotation
+		Annotations []*Annotation
 	}
 	tests := []struct {
 		name   string
 		fields fields
 		want   string
 	}{
-		{name: "Test 001", fields: fields{Qualified: &proto.Qualified{
+		{name: "Test 001", fields: fields{Qualified: &Qualified{
 			Qualifier: "test.qualifier",
 			Name:      "Test",
 			Comment:   "This is a test",
@@ -80,7 +79,7 @@ func TestAttribute_ToMermaid(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &proto.Attribute{
+			a := &Attribute{
 				Qualified:   tt.fields.Qualified,
 				Repeated:    tt.fields.Repeated,
 				Map:         tt.fields.Map,
@@ -96,23 +95,23 @@ func TestAttribute_ToMermaid(t *testing.T) {
 func TestNewAttribute(t *testing.T) {
 	type args struct {
 		namespace string
-		comment   proto.Comment
+		comment   Comment
 	}
 	tests := []struct {
 		name string
 		args args
-		want *proto.Attribute
+		want *Attribute
 	}{
-		{name: "Test 001", args: args{namespace: "test.namespace", comment: proto.Comment("testing")}, want: &proto.Attribute{
-			Qualified: &proto.Qualified{
+		{name: "Test 001", args: args{namespace: "test.namespace", comment: Comment("testing")}, want: &Attribute{
+			Qualified: &Qualified{
 				Qualifier: "test.namespace",
 				Name:      "",
 				Comment:   "testing",
-			}, Annotations: make([]*proto.Annotation, 0)}},
+			}, Annotations: make([]*Annotation, 0)}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.NewAttribute(tt.args.namespace, tt.args.comment), "NewAttribute(%v, %v)", tt.args.namespace, tt.args.comment)
+			assert.Equalf(t, tt.want, NewAttribute(tt.args.namespace, tt.args.comment), "NewAttribute(%v, %v)", tt.args.namespace, tt.args.comment)
 		})
 	}
 }

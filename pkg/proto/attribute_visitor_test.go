@@ -14,49 +14,48 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewAttributeVisitor(t *testing.T) {
 	tests := []struct {
 		name string
-		want *proto.AttributeVisitor
+		want *AttributeVisitor
 	}{
-		{name: "New Visitor", want: &proto.AttributeVisitor{}},
+		{name: "New Visitor", want: &AttributeVisitor{}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.NewAttributeVisitor(), "NewAttributeVisitor()")
+			assert.Equalf(t, tt.want, NewAttributeVisitor(), "NewAttributeVisitor()")
 		})
 	}
 }
 
 func Test_attributeVisitor_CanVisit(t *testing.T) {
 	type args struct {
-		in *proto.Line
+		in *Line
 	}
 	tests := []struct {
 		name string
 		args args
 		want bool
 	}{
-		{name: "Can Visit", args: args{in: &proto.Line{
+		{name: "Can Visit", args: args{in: &Line{
 			Syntax:  "string line1 = 1",
 			Token:   ";",
 			Comment: "Test",
 		}}, want: true},
-		{name: "Can Not Visit Comment", args: args{in: &proto.Line{
+		{name: "Can Not Visit Comment", args: args{in: &Line{
 			Syntax:  "",
 			Token:   "//",
 			Comment: "Test",
 		}}, want: false},
-		{name: "Can Not Visit Message", args: args{in: &proto.Line{
+		{name: "Can Not Visit Message", args: args{in: &Line{
 			Syntax:  "message Address",
 			Token:   "{",
 			Comment: "",
@@ -64,7 +63,7 @@ func Test_attributeVisitor_CanVisit(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			av := proto.AttributeVisitor{}
+			av := AttributeVisitor{}
 			assert.Equalf(t, tt.want, av.CanVisit(tt.args.in), "CanVisit(%v)", tt.args.in)
 		})
 	}
@@ -72,8 +71,8 @@ func Test_attributeVisitor_CanVisit(t *testing.T) {
 
 func Test_attributeVisitor_Visit(t *testing.T) {
 	type args struct {
-		in0       proto.Scanner
-		in        *proto.Line
+		in0       Scanner
+		in        *Line
 		namespace string
 	}
 
@@ -82,15 +81,15 @@ func Test_attributeVisitor_Visit(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want *proto.Attribute
+		want *Attribute
 	}{
 		{
 			name: "Test Visit", args: args{in0: testScanner,
-				in:        &proto.Line{Syntax: "string line1 = 1", Token: ";", Comment: "Test"},
+				in:        &Line{Syntax: "string line1 = 1", Token: ";", Comment: "Test"},
 				namespace: "test",
 			},
-			want: &proto.Attribute{
-				Qualified: &proto.Qualified{
+			want: &Attribute{
+				Qualified: &Qualified{
 					Qualifier: "test",
 					Name:      "line1",
 					Comment:   "Test",
@@ -99,15 +98,15 @@ func Test_attributeVisitor_Visit(t *testing.T) {
 				Map:         false,
 				Kind:        []string{"string"},
 				Ordinal:     1,
-				Annotations: make([]*proto.Annotation, 0),
+				Annotations: make([]*Annotation, 0),
 			}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			av := proto.AttributeVisitor{}
+			av := AttributeVisitor{}
 			output := av.Visit(tt.args.in0, tt.args.in, tt.args.namespace)
 			switch o := output.(type) {
-			case *proto.Attribute:
+			case *Attribute:
 				assert.Equal(t, tt.want.Qualifier, o.Qualifier)
 				assert.Equal(t, tt.want.Name, o.Name)
 				assert.Equal(t, tt.want.Comment, o.Comment)
@@ -121,7 +120,7 @@ func Test_attributeVisitor_Visit(t *testing.T) {
 
 func Test_handleDefaultAttribute(t *testing.T) {
 	type args struct {
-		out   *proto.Attribute
+		out   *Attribute
 		split []string
 	}
 	tests := []struct {
@@ -129,11 +128,11 @@ func Test_handleDefaultAttribute(t *testing.T) {
 		args args
 	}{
 		{name: "Handle Default Attribute",
-			args: args{out: proto.NewAttribute("test", "Test"), split: []string{"string", "line1", "=", "1"}}},
+			args: args{out: NewAttribute("test", "Test"), split: []string{"string", "line1", "=", "1"}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			proto.HandleDefaultAttribute(tt.args.out, tt.args.split)
+			HandleDefaultAttribute(tt.args.out, tt.args.split)
 			assert.Equalf(t, "line1", tt.args.out.Name, "Name %s", tt.args.out.Name)
 			assert.Equalf(t, 1, tt.args.out.Ordinal, "Name %d", tt.args.out.Ordinal)
 		})
@@ -142,7 +141,7 @@ func Test_handleDefaultAttribute(t *testing.T) {
 
 func Test_HandleMap(t *testing.T) {
 	type args struct {
-		out   *proto.Attribute
+		out   *Attribute
 		split []string
 	}
 	tests := []struct {
@@ -150,13 +149,13 @@ func Test_HandleMap(t *testing.T) {
 		args args
 	}{
 		{name: "Test Map", args: args{
-			out:   proto.NewAttribute("test", "Test"),
+			out:   NewAttribute("test", "Test"),
 			split: []string{"map<string,", "string>", "meta", "=", "11"},
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			proto.HandleMap(tt.args.out, tt.args.split)
+			HandleMap(tt.args.out, tt.args.split)
 			assert.True(t, tt.args.out.Map)
 		})
 	}
@@ -164,7 +163,7 @@ func Test_HandleMap(t *testing.T) {
 
 func Test_HandleRepeated(t *testing.T) {
 	type args struct {
-		out   *proto.Attribute
+		out   *Attribute
 		split []string
 	}
 	tests := []struct {
@@ -172,13 +171,13 @@ func Test_HandleRepeated(t *testing.T) {
 		args args
 	}{
 		{name: "Test Map", args: args{
-			out:   proto.NewAttribute("test", "Test"),
+			out:   NewAttribute("test", "Test"),
 			split: []string{"repeated", "string", "name", "=", "1"},
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			proto.HandleRepeated(tt.args.out, tt.args.split)
+			HandleRepeated(tt.args.out, tt.args.split)
 			assert.True(t, tt.args.out.Repeated)
 		})
 	}

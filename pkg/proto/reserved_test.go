@@ -14,40 +14,35 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNamedValue_GetAnchor(t *testing.T) {
-	type fields struct {
-		Name    string
-		Value   string
-		Comment proto.Comment
+func TestNewReserved(t *testing.T) {
+	type args struct {
+		start int32
+		end   int32
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		want   string
+		name string
+		args args
+		want *Reserved
 	}{
-		{"Get Anchor", fields{
-			Name:    "SomeName",
-			Value:   "Some Value",
-			Comment: "Some Comment",
-		}, "some_name"},
+		{name: "Reserved", args: args{
+			start: 4,
+			end:   10,
+		}, want: &Reserved{
+			Start: 4,
+			End:   10,
+		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			namedValue := &proto.NamedValue{
-				Name:    tt.fields.Name,
-				Value:   tt.fields.Value,
-				Comment: tt.fields.Comment,
-			}
-			assert.Equalf(t, tt.want, namedValue.GetAnchor(), "GetAnchor()")
+			assert.Equalf(t, tt.want, NewReserved(tt.args.start, tt.args.end), "NewReserved(%v, %v)", tt.args.start, tt.args.end)
 		})
 	}
 }

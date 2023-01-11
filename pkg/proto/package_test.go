@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -31,22 +30,22 @@ func TestNewPackage(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want *proto.Package
+		want *Package
 	}{
-		{name: "New Package", args: args{path: "test.proto"}, want: &proto.Package{
+		{name: "New Package", args: args{path: "test.proto"}, want: &Package{
 			Path:     "test.proto",
 			Name:     "",
 			Comment:  "",
-			Options:  make([]*proto.Option, 0),
-			Imports:  make([]*proto.Import, 0),
-			Messages: make([]*proto.Message, 0),
-			Enums:    make([]*proto.Enum, 0),
-			Services: make([]*proto.Service, 0),
+			Options:  make([]*Option, 0),
+			Imports:  make([]*Import, 0),
+			Messages: make([]*Message, 0),
+			Enums:    make([]*Enum, 0),
+			Services: make([]*Service, 0),
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.NewPackage(tt.args.path), "NewPackage(%v)", tt.args.path)
+			assert.Equalf(t, tt.want, NewPackage(tt.args.path), "NewPackage(%v)", tt.args.path)
 		})
 	}
 }
@@ -55,12 +54,12 @@ func TestPackage_Read(t *testing.T) {
 	type fields struct {
 		Path     string
 		Name     string
-		Comment  proto.Comment
-		Options  []*proto.Option
-		Imports  []*proto.Import
-		Messages []*proto.Message
-		Enums    []*proto.Enum
-		Services []*proto.Service
+		Comment  Comment
+		Options  []*Option
+		Imports  []*Import
+		Messages []*Message
+		Enums    []*Enum
+		Services []*Service
 	}
 	type args struct {
 		debug bool
@@ -75,7 +74,7 @@ func TestPackage_Read(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			p := &proto.Package{
+			p := &Package{
 				Path:     tt.fields.Path,
 				Name:     tt.fields.Name,
 				Comment:  tt.fields.Comment,
@@ -94,12 +93,12 @@ func TestPackage_ToMarkdownWithDiagram(t *testing.T) {
 	type fields struct {
 		Path     string
 		Name     string
-		Comment  proto.Comment
-		Options  []*proto.Option
-		Imports  []*proto.Import
-		Messages []*proto.Message
-		Enums    []*proto.Enum
-		Services []*proto.Service
+		Comment  Comment
+		Options  []*Option
+		Imports  []*Import
+		Messages []*Message
+		Enums    []*Enum
+		Services []*Service
 	}
 	tests := []struct {
 		name   string
@@ -110,7 +109,7 @@ func TestPackage_ToMarkdownWithDiagram(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			p := &proto.Package{
+			p := &Package{
 				Path:     tt.fields.Path,
 				Name:     tt.fields.Name,
 				Comment:  tt.fields.Comment,

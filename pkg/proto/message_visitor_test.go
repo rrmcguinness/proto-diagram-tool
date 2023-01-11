@@ -14,37 +14,36 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMessageVisitor_CanVisit(t *testing.T) {
 	type args struct {
-		in *proto.Line
+		in *Line
 	}
 	tests := []struct {
 		name string
 		args args
 		want bool
 	}{
-		{name: "Can Visit", args: args{in: &proto.Line{
+		{name: "Can Visit", args: args{in: &Line{
 			Syntax:  "message Test",
 			Token:   "{",
 			Comment: "Test Message",
 		}}, want: true},
-		{name: "Can not Visit", args: args{in: &proto.Line{
+		{name: "Can not Visit", args: args{in: &Line{
 			Token:   "//",
 			Comment: "Test Message",
 		}}, want: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mv := &proto.MessageVisitor{}
+			mv := &MessageVisitor{}
 			assert.Equalf(t, tt.want, mv.CanVisit(tt.args.in), "CanVisit(%v)", tt.args.in)
 		})
 	}
@@ -52,8 +51,8 @@ func TestMessageVisitor_CanVisit(t *testing.T) {
 
 func TestMessageVisitor_Visit(t *testing.T) {
 	type args struct {
-		scanner   proto.Scanner
-		in        *proto.Line
+		scanner   Scanner
+		in        *Line
 		namespace string
 	}
 	testFile := `
@@ -73,17 +72,17 @@ func TestMessageVisitor_Visit(t *testing.T) {
 	}{
 		{name: "Message Scanner", args: args{
 			scanner:   scanner,
-			in:        proto.NewLine("message Test { // Test Message"),
+			in:        NewLine("message Test { // Test Message"),
 			namespace: "test",
-		}, want: &proto.Message{
-			Qualified: &proto.Qualified{
+		}, want: &Message{
+			Qualified: &Qualified{
 				Qualifier: "test.Test",
 				Name:      "Test",
 				Comment:   "Test Message",
 			},
-			Attributes: []*proto.Attribute{
+			Attributes: []*Attribute{
 				{
-					Qualified: &proto.Qualified{
+					Qualified: &Qualified{
 						Qualifier: "test.Test",
 						Name:      "name",
 						Comment:   "Name",
@@ -92,10 +91,10 @@ func TestMessageVisitor_Visit(t *testing.T) {
 					Map:         false,
 					Kind:        []string{"string"},
 					Ordinal:     1,
-					Annotations: make([]*proto.Annotation, 0),
+					Annotations: make([]*Annotation, 0),
 				},
 				{
-					Qualified: &proto.Qualified{
+					Qualified: &Qualified{
 						Qualifier: "test.Test",
 						Name:      "type",
 						Comment:   "Type",
@@ -104,17 +103,17 @@ func TestMessageVisitor_Visit(t *testing.T) {
 					Map:         false,
 					Kind:        []string{"TestEnum"},
 					Ordinal:     2,
-					Annotations: make([]*proto.Annotation, 0),
+					Annotations: make([]*Annotation, 0),
 				},
 			},
-			Messages: make([]*proto.Message, 0),
-			Enums: []*proto.Enum{
+			Messages: make([]*Message, 0),
+			Enums: []*Enum{
 				{
-					Qualified: &proto.Qualified{
+					Qualified: &Qualified{
 						Qualifier: "test.Test.TestEnum",
 						Name:      "TestEnum",
 					},
-					Values: []*proto.EnumValue{
+					Values: []*EnumValue{
 						{
 							Namespace: "test.Test.TestEnum",
 							Ordinal:   0,
@@ -128,12 +127,12 @@ func TestMessageVisitor_Visit(t *testing.T) {
 					},
 				},
 			},
-			Reserved: make([]*proto.Reserved, 0),
+			Reserved: make([]*Reserved, 0),
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mv := &proto.MessageVisitor{}
+			mv := &MessageVisitor{}
 			assert.Equalf(t, tt.want, mv.Visit(tt.args.scanner, tt.args.in, tt.args.namespace), "Visit(%v, %v, %v)", tt.args.scanner, tt.args.in, tt.args.namespace)
 		})
 	}

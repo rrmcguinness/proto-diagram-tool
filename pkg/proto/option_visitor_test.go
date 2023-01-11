@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestOptionVisitor_CanVisit(t *testing.T) {
 	type args struct {
-		in *proto.Line
+		in *Line
 	}
 	tests := []struct {
 		name string
@@ -33,15 +32,15 @@ func TestOptionVisitor_CanVisit(t *testing.T) {
 		want bool
 	}{
 		{name: "Can Visit",
-			args: args{in: &proto.Line{Syntax: "option java_package = \"com.google.test\"", Token: ";"}},
+			args: args{in: &Line{Syntax: "option java_package = \"com.google.test\"", Token: ";"}},
 			want: true},
 		{name: "Can't Visit",
-			args: args{in: &proto.Line{Syntax: "This is a comment", Token: "//"}},
+			args: args{in: &Line{Syntax: "This is a comment", Token: "//"}},
 			want: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ov := &proto.OptionVisitor{}
+			ov := &OptionVisitor{}
 			assert.Equalf(t, tt.want, ov.CanVisit(tt.args.in), "CanVisit(%v)", tt.args.in)
 		})
 	}
@@ -52,8 +51,8 @@ func TestOptionVisitor_Visit(t *testing.T) {
 	testScanner := NewTestScanner("")
 
 	type args struct {
-		in0 proto.Scanner
-		in  *proto.Line
+		in0 Scanner
+		in  *Line
 		in2 string
 	}
 	tests := []struct {
@@ -61,15 +60,15 @@ func TestOptionVisitor_Visit(t *testing.T) {
 		args args
 		want interface{}
 	}{
-		{name: "Visit", args: args{in0: testScanner, in: &proto.Line{Syntax: "option java_package = \"com.github.rrmcguinness.proto.test.location\"", Token: ";"}, in2: "test"},
-			want: &proto.Option{NamedValue: &proto.NamedValue{
+		{name: "Visit", args: args{in0: testScanner, in: &Line{Syntax: "option java_package = \"com.github.rrmcguinness.proto.test.location\"", Token: ";"}, in2: "test"},
+			want: &Option{NamedValue: &NamedValue{
 				Name:  "java_package",
 				Value: "com.github.rrmcguinness.proto.test.location",
 			}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ov := &proto.OptionVisitor{}
+			ov := &OptionVisitor{}
 			assert.Equalf(t, tt.want, ov.Visit(tt.args.in0, tt.args.in, tt.args.in2), "Visit(%v, %v, %v)", tt.args.in0, tt.args.in, tt.args.in2)
 		})
 	}

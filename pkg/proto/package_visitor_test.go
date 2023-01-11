@@ -14,34 +14,33 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPackageVisitor_CanVisit(t *testing.T) {
 	type args struct {
-		in *proto.Line
+		in *Line
 	}
 	tests := []struct {
 		name string
 		args args
 		want bool
 	}{
-		{name: "Can Visit", args: args{in: &proto.Line{
+		{name: "Can Visit", args: args{in: &Line{
 			Syntax:  "package test.test",
 			Token:   ";",
 			Comment: "// Test Comment",
 		}}, want: true},
-		{name: "Can't Visit", args: args{in: &proto.Line{Token: "//"}}, want: false},
+		{name: "Can't Visit", args: args{in: &Line{Token: "//"}}, want: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pv := &proto.PackageVisitor{}
+			pv := &PackageVisitor{}
 			assert.Equalf(t, tt.want, pv.CanVisit(tt.args.in), "CanVisit(%v)", tt.args.in)
 		})
 	}
@@ -49,8 +48,8 @@ func TestPackageVisitor_CanVisit(t *testing.T) {
 
 func TestPackageVisitor_Visit(t *testing.T) {
 	type args struct {
-		in0 proto.Scanner
-		in  *proto.Line
+		in0 Scanner
+		in  *Line
 		in2 string
 	}
 	testReader := NewTestScanner(``)
@@ -62,26 +61,26 @@ func TestPackageVisitor_Visit(t *testing.T) {
 	}{
 		{name: "Positive Visit", args: args{
 			in0: testReader,
-			in: &proto.Line{
+			in: &Line{
 				Syntax:  "package test.package",
 				Token:   ";",
 				Comment: "Test Package",
 			},
 			in2: "test",
-		}, want: &proto.Package{
+		}, want: &Package{
 			Path:     "",
 			Name:     "test.package",
 			Comment:  "Test Package",
-			Options:  make([]*proto.Option, 0),
-			Imports:  make([]*proto.Import, 0),
-			Messages: make([]*proto.Message, 0),
-			Enums:    make([]*proto.Enum, 0),
-			Services: make([]*proto.Service, 0),
+			Options:  make([]*Option, 0),
+			Imports:  make([]*Import, 0),
+			Messages: make([]*Message, 0),
+			Enums:    make([]*Enum, 0),
+			Services: make([]*Service, 0),
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pv := &proto.PackageVisitor{}
+			pv := &PackageVisitor{}
 			assert.Equalf(t, tt.want, pv.Visit(tt.args.in0, tt.args.in, tt.args.in2), "Visit(%v, %v, %v)", tt.args.in0, tt.args.in, tt.args.in2)
 		})
 	}

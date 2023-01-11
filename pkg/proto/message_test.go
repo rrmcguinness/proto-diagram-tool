@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package core
+package proto
 
 import (
 	"testing"
 
-	"github.com/rrmcguinness/proto-diagram-tool/pkg/proto"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMessage_HasAttributes(t *testing.T) {
 	type fields struct {
-		Attributes []*proto.Attribute
+		Attributes []*Attribute
 	}
 	tests := []struct {
 		name   string
@@ -33,17 +32,17 @@ func TestMessage_HasAttributes(t *testing.T) {
 		want   bool
 	}{
 		{name: "Has Attribute",
-			fields: fields{Attributes: []*proto.Attribute{
-				proto.NewAttribute("test", "None"),
+			fields: fields{Attributes: []*Attribute{
+				NewAttribute("test", "None"),
 			}},
 			want: true},
 		{name: "Doesn't Have Attributes",
-			fields: fields{Attributes: make([]*proto.Attribute, 0)},
+			fields: fields{Attributes: make([]*Attribute, 0)},
 			want:   false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			m := &proto.Message{
+			m := &Message{
 				Attributes: tt.fields.Attributes,
 			}
 			assert.Equalf(t, tt.want, m.HasAttributes(), "HasAttributes()")
@@ -53,7 +52,7 @@ func TestMessage_HasAttributes(t *testing.T) {
 
 func TestMessage_HasEnums(t *testing.T) {
 	type fields struct {
-		Enums []*proto.Enum
+		Enums []*Enum
 	}
 	tests := []struct {
 		name   string
@@ -62,16 +61,16 @@ func TestMessage_HasEnums(t *testing.T) {
 	}{
 		{name: "Has Enums",
 			fields: fields{
-				Enums: []*proto.Enum{proto.NewEnum("test", "test", "test")}},
+				Enums: []*Enum{NewEnum("test", "test", "test")}},
 			want: true},
 		{name: "Doesn't Have Enums",
 			fields: fields{
-				Enums: make([]*proto.Enum, 0)},
+				Enums: make([]*Enum, 0)},
 			want: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			m := &proto.Message{
+			m := &Message{
 				Enums: tt.fields.Enums,
 			}
 			assert.Equalf(t, tt.want, m.HasEnums(), "HasEnums()")
@@ -81,21 +80,21 @@ func TestMessage_HasEnums(t *testing.T) {
 
 func TestMessage_HasMessages(t *testing.T) {
 	type fields struct {
-		Messages []*proto.Message
+		Messages []*Message
 	}
 	tests := []struct {
 		name   string
 		fields fields
 		want   bool
 	}{
-		{name: "Has Messages", fields: fields{Messages: []*proto.Message{proto.NewMessage()}},
+		{name: "Has Messages", fields: fields{Messages: []*Message{NewMessage()}},
 			want: true},
-		{name: "Doesn't have Messages", fields: fields{Messages: make([]*proto.Message, 0)},
+		{name: "Doesn't have Messages", fields: fields{Messages: make([]*Message, 0)},
 			want: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			m := &proto.Message{
+			m := &Message{
 				Messages: tt.fields.Messages,
 			}
 			assert.Equalf(t, tt.want, m.HasMessages(), "HasMessages()")
@@ -106,19 +105,19 @@ func TestMessage_HasMessages(t *testing.T) {
 func TestNewMessage(t *testing.T) {
 	tests := []struct {
 		name string
-		want *proto.Message
+		want *Message
 	}{
-		{name: "New Message", want: &proto.Message{
-			Qualified:  &proto.Qualified{},
-			Attributes: make([]*proto.Attribute, 0),
-			Messages:   make([]*proto.Message, 0),
-			Enums:      make([]*proto.Enum, 0),
-			Reserved:   make([]*proto.Reserved, 0),
+		{name: "New Message", want: &Message{
+			Qualified:  &Qualified{},
+			Attributes: make([]*Attribute, 0),
+			Messages:   make([]*Message, 0),
+			Enums:      make([]*Enum, 0),
+			Reserved:   make([]*Reserved, 0),
 		}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, proto.NewMessage(), "NewMessage()")
+			assert.Equalf(t, tt.want, NewMessage(), "NewMessage()")
 		})
 	}
 }
