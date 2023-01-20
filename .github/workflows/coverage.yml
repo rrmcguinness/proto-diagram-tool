@@ -27,7 +27,7 @@ jobs:
         run: bazel test //... && bazel coverage --combined_report=lcov //... && third-party/lcov/bin/genhtml bazel-testlogs/pkg/proto/proto_test/coverage.dat -o ./target/coverage -t "Proto Diagram Tool"
 
       - name: "Coverage Badge"
-        uses: rrmcguinness/lcov_gh_badges@37e189ee210489b51dbcc306cb9db93e4a34877f
+        uses: rrmcguinness/lcov_gh_badges@896eca9766435d91e21ec2f9f4e7737fc8cb8935
         with:
           file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
 
