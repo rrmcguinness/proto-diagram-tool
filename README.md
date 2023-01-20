@@ -2,8 +2,7 @@
 
 ![build](https://github.com/rrmcguinness/proto-diagram-tool/actions/workflows/main.yml/badge.svg)
 ![coverage](https://github.com/rrmcguinness/proto-diagram-tool/actions/workflows/coverage.yml/badge.svg)
-
-![test](https://img.shields.io/static/v1?label=Coverage&message=80%&color=Green&style=flat-square)
+![coverage](https://github.com/rrmcguinness/proto-diagram-tool/actions/workflows/coverage.yml/coverage.svg)
 
 This utility package is a compiled Go program that reads a protobuf
 source directory and generates Mermaid Diagrams in PROTO_DIAGRAM.md files

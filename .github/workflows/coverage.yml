@@ -26,27 +26,8 @@ jobs:
       - name: "Coverage"
         run: bazel test //... && bazel coverage --combined_report=lcov //... && third-party/lcov/bin/genhtml bazel-testlogs/pkg/proto/proto_test/coverage.dat -o ./target/coverage -t "Proto Diagram Tool"
 
-      - name: "Coverage Report"
-        uses: manarbenkraouda/lcov-reporter-action@v0.3.5.3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
-          lcov-base: ${env.GITHUB_WORKSPACE}
+      -name: "Coverage Badge"
+       uses: rrmcguinness/lcov_gh_badges@88428718fab588dc14f73c25738400e8eef79b3b
+       with:
+         file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
 
-      - name: "Comment to Environment"
-        env:
-          BODY: ${{ github.event.comment.body }}
-        run: echo "COVERAGE=$BODY" >> $GITHUB_ENV
-
-      - name: Create the Badge
-        uses: schneegans/dynamic-badges-action@v1.6.0
-        with:
-          auth: ${{ secrets.GIST_SECRET }}
-          filename: proto-diagram-tool-coverage.json
-          label: Coverage
-          gistID: e2d1696c1ef0cbc67ef8bcbbfc46313a
-          message: ${{ env.COVERAGE }}
-          valColorRange: ${{ env.COVERAGE }}
-          maxColorRange: 100
-          minColorRange: 0
-          namedLogo: "Google Cloud"

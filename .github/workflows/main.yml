@@ -28,3 +28,10 @@ jobs:
 
       - name: "Build"
         run: bazel build //...
+
+      - name: "Compute Coverage"
+        uses: rrmcguinness/lcov_gh_badges@c67716e1eda277d60a6a75d7b9f1717bc4b67ab3
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          dat_file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
+          gist_id: e2d1696c1ef0cbc67ef8bcbbfc46313a
