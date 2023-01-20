@@ -24,12 +24,12 @@ jobs:
           key: bazel
 
       - name: "Test"
-        run: bazel test //...
+        run: bazel test //... && bazel coverage //...
 
       - name: "Build"
         run: bazel build //...
 
       - name: "Coverage Badge"
-        uses: rrmcguinness/lcov_gh_badges@896eca9766435d91e21ec2f9f4e7737fc8cb8935
+        uses: rrmcguinness/lcov_gh_badges@8279d2df42513e74b2050755d4ea88490fd0849b
         with:
           file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
