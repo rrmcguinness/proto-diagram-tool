@@ -30,6 +30,6 @@ jobs:
         run: bazel build //...
 
       - name: "Coverage Badge"
-        uses: rrmcguinness/lcov_gh_badges@8279d2df42513e74b2050755d4ea88490fd0849b
+        uses: rrmcguinness/lcov_gh_badges@3d302bf663e45a63f58a7dd8231042bf3b9bf6e0
         with:
           file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
