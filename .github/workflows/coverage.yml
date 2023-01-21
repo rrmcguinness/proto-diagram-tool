@@ -27,16 +27,8 @@ jobs:
         run: bazel test //... && bazel coverage --combined_report=lcov //... && third-party/lcov/bin/genhtml bazel-testlogs/pkg/proto/proto_test/coverage.dat -o ./target/coverage -t "Proto Diagram Tool"
 
       - name: "Coverage Badge"
-        uses: rrmcguinness/lcov_gh_badges@85b1485b6e30b515c2c80929ff2d99955aee0ef3
+        uses: rrmcguinness/lcov_gh_badges@8517dd83976eb5230e62dbf1a879925356fefbe5
         with:
           file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
-
-      - name: "Commit Badge"
-        run: git add coverage.svg
-
-      - name: "Add Coverage SVG"
-        run: git commit -m "Adding coverage svg"
-
-      - name: "Commit Coverage"
-        run: git push origin HEAD:main
+          access_token: ${{ secrets.GITHUB_TOKEN }}
 
