@@ -31,3 +31,10 @@ jobs:
         with:
           file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
 
+      - name: "Commit Badge"
+        run: git add coverage.svg
+      - name: "Add Coverage SVG"
+        run: git commit -m "Adding coverage svg"
+      - name: "Commit Coverage"
+        run: git push origin HEAD:main
+

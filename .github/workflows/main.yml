@@ -23,13 +23,5 @@ jobs:
           path: "/home/runner/.cache/bazel"
           key: bazel
 
-      - name: "Test"
-        run: bazel test //... && bazel coverage //...
-
       - name: "Build"
         run: bazel build //...
-
-      - name: "Coverage Badge"
-        uses: rrmcguinness/lcov_gh_badges@0afb395e8149182d8e6bc78a1e31a7de1868c697
-        with:
-          file: ./bazel-testlogs/pkg/proto/proto_test/coverage.dat
