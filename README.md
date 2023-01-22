@@ -25,7 +25,6 @@ or open a bug. Please follow the [Contributing](CONTRIBUTING.md) guidelines.
 ./proto-diagram-tool -d test/protos
 ````
 
-
 | Input File                                                          | Output File                                                            |
 |---------------------------------------------------------------------|------------------------------------------------------------------------|
 | [Location Protobuf](test/protos/test/location/model.proto)          | [Location Markdown](test/protos/test/location/model.proto.md)          |
