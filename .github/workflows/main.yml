@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "**/coverage.svg"
   pull_request:
 
 jobs:
@@ -22,9 +24,6 @@ jobs:
         with:
           path: "/home/runner/.cache/bazel"
           key: bazel
-
-      - name: "Test"
-        run: bazel test //... && bazel coverage //...
 
       - name: "Build"
         run: bazel build //...

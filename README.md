@@ -2,7 +2,7 @@
 
 ![build](https://github.com/rrmcguinness/proto-diagram-tool/actions/workflows/main.yml/badge.svg)
 ![coverage](https://github.com/rrmcguinness/proto-diagram-tool/actions/workflows/coverage.yml/badge.svg)
-![coverage](https://github.com/rrmcguinness/proto-diagram-tool/actions/workflows/coverage.yml/coverage.svg)
+![coverage](coverage.svg)
 
 This utility package is a compiled Go program that reads a protobuf
 source directory and generates Mermaid Diagrams in PROTO_DIAGRAM.md files
@@ -24,7 +24,6 @@ or open a bug. Please follow the [Contributing](CONTRIBUTING.md) guidelines.
 ```shell
 ./proto-diagram-tool -d test/protos
 ````
-
 
 | Input File                                                          | Output File                                                            |
 |---------------------------------------------------------------------|------------------------------------------------------------------------|
